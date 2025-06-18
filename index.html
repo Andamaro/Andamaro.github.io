@@ -91,20 +91,13 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       transition: transform 0.2s;
       cursor: pointer;
-    }
-
-    .node:hover {
-      transform: scale(1.1);
+      text-decoration: none;
     }
 
     .node .icon {
       font-size: 1.4em;
       color: #fff;
       z-index: 1;
-    }
-
-    .node.completado {
-      background-color: #27ae60 !important;
     }
 
     .divider {
@@ -135,12 +128,13 @@
       box-shadow: 0 -2px 8px rgba(0,0,0,0.5);
     }
 
-    .bottom-nav i {
+    .bottom-nav a {
       font-size: 2em;
       color: #aaa;
+      text-decoration: none;
     }
 
-    .bottom-nav .active i {
+    .bottom-nav .active {
       color: #fff;
     }
   </style>
@@ -156,9 +150,9 @@
   </div>
 
   <div class="main">
-    <div class="node" id="nodoDefinicion" title="Ir a Definición">
-      <i class="fas fa-book-open icon" id="iconoDefinicion"></i>
-    </div>
+    <a class="node" href="https://andamaro.github.io/definicion.html" title="Ir a Definición">
+      <i class="fas fa-book-open icon"></i>
+    </a>
     <div class="label">Definición</div>
 
     <div class="divider"></div>
@@ -166,7 +160,7 @@
     <div class="node">
       <i class="fas fa-lightbulb icon"></i>
     </div>
-    <div class="label">Ejemplos de fracciones</div>
+    <div class="label">Ejemplos</div>
 
     <div class="divider"></div>
 
@@ -184,41 +178,18 @@
 
     <div class="divider"></div>
 
-    <!-- Nodo nuevo para abrir enlace externo -->
-    <div class="node" id="nodoInicio" title="Ir a Inicio">
+    <a class="node" href="https://andamaro.github.io/index.html" title="Inicio">
       <i class="fas fa-arrow-right icon"></i>
-    </div>
+    </a>
     <div class="label">Inicio</div>
   </div>
 
   <div class="bottom-nav">
-    <div class="active"><i class="fas fa-home"></i></div>
-    <div><i class="fas fa-book-open"></i></div>
-    <div><i class="fas fa-gamepad"></i></div>
-    <div><i class="fas fa-user"></i></div>
-    <div><i class="fas fa-gear"></i></div>
+    <a class="active" href="#"><i class="fas fa-home"></i></a>
+    <a href="#"><i class="fas fa-book-open"></i></a>
+    <a href="#"><i class="fas fa-gamepad"></i></a>
+    <a href="#"><i class="fas fa-user"></i></a>
+    <a href="#"><i class="fas fa-gear"></i></a>
   </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const nodoDefinicion = document.getElementById("nodoDefinicion");
-      const iconoDefinicion = document.getElementById("iconoDefinicion");
-      const completada = localStorage.getItem("definicion_completada");
-
-      if (completada === "true") {
-        nodoDefinicion.classList.add("completado");
-        iconoDefinicion.className = "fas fa-check icon";
-      }
-
-      nodoDefinicion.addEventListener("click", function() {
-        window.location.href = "https://andamaro.github.io/definicion.html";
-      });
-
-      const nodoInicio = document.getElementById("nodoInicio");
-      nodoInicio.addEventListener("click", function() {
-        window.open("https://andamaro.github.io/index.html", "_blank");
-      });
-    });
-  </script>
 </body>
 </html>
