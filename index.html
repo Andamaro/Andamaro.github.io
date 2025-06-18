@@ -146,21 +146,16 @@
   </style>
 </head>
 <body>
-
-  <!-- Barra superior -->
   <div class="top-bar">
     <span>FracVisual</span>
   </div>
 
-  <!-- Tarjeta de sección -->
   <div class="section-card">
     <div class="etapa">Etapa 1</div>
     <div class="titulo">Sección 1: ¿Qué es una fracción?</div>
   </div>
 
-  <!-- Ruta vertical -->
   <div class="main">
-    <!-- Nodo: Definición -->
     <div class="node" id="nodoDefinicion" title="Ir a Definición">
       <i class="fas fa-book-open icon" id="iconoDefinicion"></i>
     </div>
@@ -168,15 +163,13 @@
 
     <div class="divider"></div>
 
-    <!-- Nodo: Ejemplos -->
     <div class="node">
       <i class="fas fa-lightbulb icon"></i>
     </div>
-    <div class="label">Ejemplos</div>
+    <div class="label">Ejemplos de fracciones</div>
 
     <div class="divider"></div>
 
-    <!-- Nodo: Nivel 1 -->
     <div class="node">
       <span class="icon">1</span>
     </div>
@@ -184,14 +177,20 @@
 
     <div class="divider"></div>
 
-    <!-- Nodo: Nivel 2 -->
     <div class="node">
       <span class="icon">2</span>
     </div>
     <div class="label">Nivel 2</div>
+
+    <div class="divider"></div>
+
+    <!-- Nodo nuevo para abrir enlace externo -->
+    <div class="node" id="nodoInicio" title="Ir a Inicio">
+      <i class="fas fa-arrow-right icon"></i>
+    </div>
+    <div class="label">Inicio</div>
   </div>
 
-  <!-- Barra inferior -->
   <div class="bottom-nav">
     <div class="active"><i class="fas fa-home"></i></div>
     <div><i class="fas fa-book-open"></i></div>
@@ -202,18 +201,22 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const nodo = document.getElementById("nodoDefinicion");
-      const icono = document.getElementById("iconoDefinicion");
+      const nodoDefinicion = document.getElementById("nodoDefinicion");
+      const iconoDefinicion = document.getElementById("iconoDefinicion");
       const completada = localStorage.getItem("definicion_completada");
 
       if (completada === "true") {
-        nodo.classList.add("completado");
-        icono.className = "fas fa-check icon";
+        nodoDefinicion.classList.add("completado");
+        iconoDefinicion.className = "fas fa-check icon";
       }
 
-      // Redirigir directo al hacer clic
-      nodo.addEventListener("click", function() {
+      nodoDefinicion.addEventListener("click", function() {
         window.location.href = "https://andamaro.github.io/definicion.html";
+      });
+
+      const nodoInicio = document.getElementById("nodoInicio");
+      nodoInicio.addEventListener("click", function() {
+        window.open("https://andamaro.github.io/index.html", "_blank");
       });
     });
   </script>
