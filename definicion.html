@@ -18,6 +18,7 @@
         .progress-bar {
             height: 8px;
             background-color: #212638;
+            width: 100%;
         }
 
         .progress {
@@ -55,12 +56,16 @@
             text-align: center;
         }
 
+        ul {
+            text-align: left;
+            padding-left: 40px;
+        }
+
         img {
             display: block;
             margin: 16px auto;
             border-radius: 10px;
             max-width: 90%;
-
         }
 
         button {
@@ -172,13 +177,13 @@
         <div class="section">
             <h2>🛠️ ¿Dónde usamos fracciones?</h2>
             <p>Las fracciones se utilizan en muchas situaciones cotidianas:</p>
-            <ul style="text-align: left; padding-left: 40px;">
+            <ul>
                 <li>📏 Medir longitudes o cantidades</li>
                 <li>🍰 Cocinar con recetas</li>
                 <li>📚 Resolver problemas matemáticos</li>
                 <li>⚽ Dividir equipos o turnos</li>
             </ul>
-            <img src="file:///android_asset/fracciones_reales.png" alt="Uso de fracciones en la vida real">
+            <img src="fracciones_reales.png" alt="Uso de fracciones en la vida real">
             <button onclick="completarLeccion()">Finalizar lección</button>
         </div>
 
@@ -188,45 +193,41 @@
                 <div class="check">✔️</div>
                 <h2>¡Lección completada!</h2>
                 <p>¡Excelente trabajo! Has aprendido qué es una fracción. 🎉</p>
-           <button onclick="window.location.href='https://andamaro.github.io/index.html'">¡Entendido!</button>
-
-
-
+                <button onclick="window.location.href='https://andamaro.github.io/index.html'">¡Entendido!</button>
             </div>
-
-
         </div>
 
-        <script>
-            let paso = 0;
-            const secciones = document.querySelectorAll(".section");
-            const barra = document.getElementById("progress");
+    </div>
 
-            function siguiente() {
+    <script>
+        let paso = 0;
+        const secciones = document.querySelectorAll(".section:not(#completado)");
+        const barra = document.getElementById("progress");
+        const completadoSection = document.getElementById("completado");
+
+        function siguiente() {
+            if (paso < secciones.length - 1) {
                 secciones[paso].classList.remove("active");
                 paso++;
                 secciones[paso].classList.add("active");
                 actualizarBarra();
             }
+        }
 
-            function actualizarBarra() {
-                const porcentaje = ((paso) / (secciones.length - 1)) * 100;
-                barra.style.width = porcentaje + "%";
-            }
+        function actualizarBarra() {
+            const porcentaje = (paso / (secciones.length)) * 100;
+            barra.style.width = porcentaje + "%";
+        }
 
-            function completarLeccion() {
-                secciones[paso].classList.remove("active");
-                document.getElementById("completado").style.display = "block";
-                barra.style.width = "100%";
-                localStorage.setItem("definicion_completada", "true");
-            }
+        function completarLeccion() {
+            secciones[paso].classList.remove("active");
+            completadoSection.style.display = "block";
+            barra.style.width = "100%";
+            localStorage.setItem("definicion_completada", "true");
+        }
 
-            function volverInicio() {
-                window.location.href = "https://andamaro.github.io/index.html";
-            }
-
-            window.onload = actualizarBarra;
-        </script>
+        window.onload = actualizarBarra;
+    </script>
 </body>
 
 </html>
