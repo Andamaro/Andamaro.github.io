@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <title>Configuración - FracVisual</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
   <style>
-    
-    .top-bar img {
-      max-height: 40px;
-      max-width: 90%;
-    }
-
     .config-container {
       padding: 20px;
     }
@@ -51,70 +46,84 @@
       cursor: pointer;
     }
 
-    select {
-      background-color: #212638;
-      color: #fff;
-      border: 1px solid #3690F7;
-      border-radius: 6px;
-      padding: 6px;
-      font-size: 0.9em;
-    }
+
     .modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
 
-.modal-box {
-  background-color: #212638;
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 300px;
-  text-align: center;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
-}
+    .modal-box {
+      background-color: #212638;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 300px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
 
-.modal-box h3 {
-  margin-bottom: 10px;
-}
+    .modal-box h3 {
+      margin-bottom: 10px;
+    }
 
-.modal-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 20px;
-}
+    .modal-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 20px;
+    }
 
-.modal-buttons button {
-  flex: 1;
-  padding: 8px;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9em;
-  cursor: pointer;
-}
+    .modal-buttons button {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9em;
+      cursor: pointer;
+    }
 
-.modal-buttons .cancelar {
-  background-color: #666;
-  color: #fff;
-}
+    .modal-buttons .cancelar {
+      background-color: #666;
+      color: #fff;
+    }
 
-.modal-buttons .confirmar {
-  background-color: #e74c3c;
-  color: #fff;
-}
+    .modal-buttons .confirmar {
+      background-color: #e74c3c;
+      color: #fff;
+    }
 
+    .copy-notification {
+      margin-top: 10px;
+      font-size: 0.8em;
+      color: #6fd96f;
+      display: none;
+    }
+
+    .creditos {
+      text-align: center;
+      font-size: 0.75em;
+      color: #aaa;
+      padding: 24px 16px 30px;
+      line-height: 1.6;
+      border-top: 1px solid #2c314a;
+      margin-top: 40px;
+    }
   </style>
 </head>
+
 <body>
 
+
   <div class="top-bar">
-    <img src="logo_enc.png" alt="FracVisual">
+    <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
+
   </div>
 
   <div class="config-container">
@@ -123,14 +132,13 @@
     <div class="config-option">
       <h3>Reiniciar progreso</h3>
       <p>Esto eliminará tu progreso actual.</p>
-    <button onclick="abrirModal()">Reiniciar</button>
-
+      <button onclick="abrirModal()">Reiniciar</button>
     </div>
 
     <div class="config-option">
       <h3>Contactar desarrollador</h3>
       <p>Envía tus comentarios o sugerencias.</p>
-      <button onclick="contactar()">Enviar mensaje</button>
+      <button onclick="abrirContacto()">Enviar mensaje</button>
     </div>
 
     <div class="config-option">
@@ -138,125 +146,145 @@
       <p>Eliminará datos almacenados temporalmente.</p>
       <button onclick="limpiarCache()">Limpiar</button>
     </div>
-<!-- Modal de confirmación -->
-<div id="modalReiniciar" class="modal-overlay" onclick="cerrarModal(event)">
-  <div class="modal-box">
-    <h3>¿Reiniciar progreso?</h3>
-    <p>Se eliminará tu avance en todas las lecciones. ¿Estás seguro?</p>
-    <div class="modal-buttons">
-      <button class="cancelar" onclick="cerrarModal()">Cancelar</button>
-      <button class="confirmar" onclick="confirmarReinicio()">Sí, reiniciar</button>
+  </div>
+
+  <!-- Modal Reiniciar -->
+  <div id="modalReiniciar" class="modal-overlay" onclick="cerrarModal(event)">
+    <div class="modal-box">
+      <h3>¿Reiniciar progreso?</h3>
+      <p>Se eliminará tu avance en todas las lecciones. ¿Estás seguro?</p>
+      <div class="modal-buttons">
+        <button class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        <button class="confirmar" onclick="confirmarReinicio()">Sí, reiniciar</button>
+      </div>
     </div>
   </div>
-</div>
 
-    
+  <!-- Modal Contacto -->
+  <div id="modalContacto" class="modal-overlay" onclick="cerrarContacto(event)">
+    <div class="modal-box">
+      <h3>Contacto</h3>
+      <p>Correo de contacto:</p>
+      <p><strong id="correoTexto">andres.cguzman26@gmail.com</strong></p>
+      <button onclick="copiarCorreo()">Copiar correo</button>
+      <div id="notificacionCopiado" class="copy-notification">¡Correo copiado!</div>
+      <div class="modal-buttons">
+        <button class="cancelar" onclick="cerrarContacto()">Cerrar</button>
+      </div>
+    </div>
   </div>
 
-</div>
-   <div class="bottom-nav">
-    <a  href="https://andamaro.github.io/index.html"><i class="fas fa-home"></i></a>
+  <div class="bottom-nav">
+    <a href="https://andamaro.github.io/index.html"><i class="fas fa-home"></i></a>
     <a href="#"><i class="fas fa-book-open"></i></a>
-    <a  href="https://andamaro.github.io/juegos.html"><i class="fas fa-gamepad"></i></a>
+    <a class="active" href="https://andamaro.github.io/juegos.html"><i class="fas fa-gamepad"></i></a>
     <a href="#"><i class="fas fa-user"></i></a>
-    <a class="active" href="https://andamaro.github.io/configuracion.html"><i class="fas fa-gear"></i></a>
+    <a href="https://andamaro.github.io/configuracion.html"><i class="fas fa-gear"></i></a>
   </div>
-<audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
-<audio id="menuAudio" src="menu.mp3" preload="auto"></audio>
 
-<script>
-  const sonidoClic = document.getElementById("leccionAudio");
-  const sonidoMenu = document.getElementById("menuAudio");
+  <audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
+  <audio id="menuAudio" src="menu.mp3" preload="auto"></audio>
 
-  function playClick() {
-    sonidoClic.currentTime = 0;
-    sonidoClic.play();
-  }
+  <script>
+    const sonidoClic = document.getElementById("leccionAudio");
+    const sonidoMenu = document.getElementById("menuAudio");
 
-  function playMenu() {
-    sonidoMenu.currentTime = 0;
-    sonidoMenu.play();
-  }
+    function playClick() {
+      sonidoClic.currentTime = 0;
+      sonidoClic.play();
+    }
 
-  function contactar() {
-    playClick();
-    setTimeout(() => {
-      const correo = "andres.cguzman26@gmail.com";
-      const asunto = encodeURIComponent("Comentario sobre FracVisual");
-      const cuerpo = encodeURIComponent("Hola, me gustaría comentar sobre la app...");
-      window.location.href = `mailto:${correo}?subject=${asunto}&body=${cuerpo}`;
-    }, 500);
-  }
+    function playMenu() {
+      sonidoMenu.currentTime = 0;
+      sonidoMenu.play();
+    }
 
-  function limpiarCache() {
-    playClick();
-    localStorage.clear();
-  }
-
-  function abrirModal() {
-    playClick();
-    document.getElementById('modalReiniciar').style.display = 'flex';
-  }
-
-  function cerrarModal(e) {
-    if (!e || e.target.id === 'modalReiniciar') {
+    function abrirModal() {
       playClick();
+      document.getElementById('modalReiniciar').style.display = 'flex';
+    }
+
+    function cerrarModal(e) {
+      if (!e || e.target.id === 'modalReiniciar') {
+        playClick();
+        document.getElementById('modalReiniciar').style.display = 'none';
+      }
+    }
+
+    function confirmarReinicio() {
+      playClick();
+      localStorage.clear();
       document.getElementById('modalReiniciar').style.display = 'none';
     }
-  }
 
-  function confirmarReinicio() {
-    playClick();
-    localStorage.clear();
-    document.getElementById('modalReiniciar').style.display = 'none';
-  }
+    function limpiarCache() {
+      playClick();
+      localStorage.clear();
+    }
 
-  // Sonido al navegar por menú inferior
-  document.querySelectorAll(".bottom-nav a").forEach(link => {
-    link.addEventListener("click", e => {
-      const destino = link.getAttribute("href");
-      if (destino && destino !== "#") {
-        playMenu();
+    function abrirContacto() {
+      playClick();
+      document.getElementById('modalContacto').style.display = 'flex';
+    }
+
+    function cerrarContacto(e) {
+      if (!e || e.target.id === 'modalContacto') {
+        playClick();
+        document.getElementById('modalContacto').style.display = 'none';
       }
-    });
-  });
-   const menuSonido = document.getElementById("menuAudio");
+    }
 
-  document.querySelectorAll(".bottom-nav a").forEach(link => {
-    link.addEventListener("click", e => {
-      const destino = link.getAttribute("href");
+    function copiarCorreo() {
+      playClick();
 
-      if (destino && destino !== "#") {
-        e.preventDefault();
+      const correo = document.getElementById("correoTexto").innerText;
+      navigator.clipboard.writeText(correo).then(() => {
+        const notif = document.getElementById("notificacionCopiado");
+
+        // Mostrar mensaje
+        notif.style.display = "block";
+
+        // Vibración (si el dispositivo lo permite)
+        if (navigator.vibrate) {
+          navigator.vibrate(150); // 150 ms de vibración
+        }
+
+        // Oculta mensaje y cierra modal automáticamente
         setTimeout(() => {
-          menuSonido.currentTime = 0;
-          menuSonido.play();
-        }, 500); // Espera medio segundo
+          notif.style.display = "none";
+          document.getElementById("modalContacto").style.display = "none";
+        }, 2000);
+      });
+    }
 
-        setTimeout(() => {
-          window.location.href = destino;
-        }, 1000); // Navega después de 1s (0.5s de sonido + margen)
-      } else {
-        // Si no hay destino válido (ej. "#"), solo reproduce el sonido
-        setTimeout(() => {
-          menuSonido.currentTime = 0;
-          menuSonido.play();
-        }, 500);
-      }
+    document.querySelectorAll(".bottom-nav a").forEach(link => {
+      link.addEventListener("click", e => {
+        const destino = link.getAttribute("href");
+        if (destino && destino !== "#") {
+          e.preventDefault();
+          playMenu();
+          setTimeout(() => {
+            window.location.href = destino;
+          }, 800);
+        } else {
+          playMenu();
+        }
+      });
     });
-  });
-</script>
-<script>
-  const menuItems = document.querySelectorAll('.bottom-nav a');
 
-  menuItems.forEach(link => {
-    link.addEventListener('click', () => {
-      menuItems.forEach(item => item.classList.remove('active'));
-      link.classList.add('active');
+    // Resaltar ítem activo
+    document.querySelectorAll('.bottom-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelectorAll('.bottom-nav a').forEach(item => item.classList.remove('active'));
+        link.classList.add('active');
+      });
     });
-  });
-</script>
+  </script>
+  <div class="creditos">
+    App creada por <strong>Andrés Cruz Guzmán</strong> © 2025 · <em>FracVisual</em><br>
+    Todos los derechos reservados. Aplicación sin fines de lucro con propósito educativo.
+  </div>
 
-</script>
 </body>
+
 </html>
