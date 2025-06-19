@@ -1,174 +1,332 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>FracVisual - Perfil</title>
-  <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Perfil - FracVisual</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Palanquin Dark', sans-serif;
-      background-color: #171B2A;
-      color: #fff;
-      min-height: 100vh;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
+  
 
     .perfil-container {
-      width: 100%;
-      max-width: 450px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
+      padding: 20px;
+      text-align: center;
     }
 
     .foto-perfil {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
-      background-color: #212638;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5em;
-      color: #ccc;
-      box-shadow: 0 0 12px rgba(0,0,0,0.6);
+      border: 3px solid #3690F7;
+      object-fit: cover;
+      margin-bottom: 10px;
+      cursor: pointer;
     }
+    
 
-    .nivel-box {
-      width: 100%;
-      text-align: center;
+    input[type="file"] {
+      display: none;
     }
 
     .nivel {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #ffffff;
-      margin-bottom: 6px;
+      font-size: 1.1em;
     }
 
-    .barra-exp {
+    .barra-progreso {
       width: 80%;
       height: 10px;
-      background-color: #2c314a;
-      border-radius: 6px;
-      margin: 0 auto;
+      background-color: #212638;
+      border-radius: 10px;
+      margin: 10px auto;
       overflow: hidden;
     }
 
-    .barra-exp .progreso {
+    .barra-progreso-inner {
+      width: 45%;
       height: 100%;
-      width: 40%; /* porcentaje de progreso */
       background-color: #3690F7;
-    }
-
-    .seccion {
-      width: 100%;
-      background-color: #212638;
-      border-radius: 12px;
-      padding: 16px;
-    }
-
-    .seccion h2 {
-      font-size: 1em;
-      margin-bottom: 12px;
-      color: #3690F7;
+      transition: width 0.5s;
     }
 
     .insignias {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: space-around;
+      margin-top: 20px;
     }
 
     .insignia {
-      background-color: #474E66;
+      display: inline-block;
+      background-color: #212638;
+      padding: 10px;
       border-radius: 10px;
-      padding: 12px;
-      width: 80px;
-      text-align: center;
-      color: #fff;
-      font-size: 0.8em;
-    }
-
-    .insignia i {
-      font-size: 1.5em;
-      margin-bottom: 6px;
-      color: gold;
+      margin: 5px;
+      font-size: 1.2em;
     }
 
     .premium {
-      background-color: #f1c40f;
-      border-radius: 12px;
-      color: #000;
-      padding: 14px 20px;
+      margin-top: 30px;
+    }
+
+    .premium button {
+      background-color: gold;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
       font-weight: bold;
-      margin-top: 10px;
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
+      font-size: 0.95em;
       cursor: pointer;
-      transition: background 0.3s;
-      display: flex;
-      justify-content: center;
+    }
+
+    .premium button i {
+      color: #ffc107;
+      margin-right: 6px;
+    }
+
+    .creditos {
+      text-align: center;
+      font-size: 0.75em;
+      color: #aaa;
+      padding: 24px 16px 30px;
+      line-height: 1.6;
+      border-top: 1px solid #2c314a;
+      margin-top: 40px;
+    }
+
+  
+    /* Modal genérico */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
       align-items: center;
-      gap: 10px;
+      justify-content: center;
+      z-index: 2000;
     }
 
-    .premium:hover {
-      background-color: #f39c12;
+    .modal-box {
+      background-color: #212638;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 300px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
     }
 
-    .premium i {
-      color: #fff700;
-      font-size: 1.5em;
+    .modal-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
     }
+
+    .modal-buttons button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9em;
+      cursor: pointer;
+    }
+
+    .confirmar {
+      background-color: #3690F7;
+      color: white;
+    }
+
+    .cancelar {
+      background-color: #666;
+      color: white;
+    }
+    /* Campo de nombre de usuario */
+#nombreUsuario {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1em;
+  width: 80%;
+  max-width: 300px;
+  text-align: center;
+  background-color: #212638;
+  color: white;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+#nombreUsuario::placeholder {
+  color: #aaa;
+}
+
+/* Botón para guardar nombre */
+#guardarNombreBtn {
+  margin-top: 10px;
+  background-color: #3690F7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#guardarNombreBtn:hover {
+  background-color: #2574d3;
+}
 
   </style>
 </head>
 <body>
 
-  <div class="perfil-container">
-
-    <!-- Foto -->
-    <div class="foto-perfil">
-      <i class="fas fa-user"></i>
-    </div>
-
-    <!-- Nivel -->
-    <div class="nivel-box">
-      <div class="nivel">Nivel 1</div>
-      <div class="barra-exp">
-        <div class="progreso"></div>
-      </div>
-    </div>
-
-    <!-- Logros -->
-    <div class="seccion">
-      <h2>Logros e Insignias</h2>
-      <div class="insignias">
-        <div class="insignia"><i class="fas fa-star"></i><br>Novato</div>
-        <div class="insignia"><i class="fas fa-fire"></i><br>Racha 3 días</div>
-        <div class="insignia"><i class="fas fa-clock"></i><br>Constante</div>
-        <div class="insignia"><i class="fas fa-trophy"></i><br>Campeón</div>
-        <div class="insignia"><i class="fas fa-medal"></i><br>Pro</div>
-        <div class="insignia"><i class="fas fa-brain"></i><br>Memoria</div>
-        <div class="insignia"><i class="fas fa-dumbbell"></i><br>Entrenador</div>
-        <div class="insignia"><i class="fas fa-user-clock"></i><br>Activo</div>
-      </div>
-    </div>
-
-    <!-- Premium -->
-    <div class="premium" onclick="alert('¡Muy pronto podrás desbloquear Premium!')">
-      <i class="fas fa-crown"></i> ¡Hazte Premium!
-    </div>
+<div class="top-bar">
+    <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
 
   </div>
 
+  <div class="perfil-container">
+    <label for="fileInput">
+      <img src="avatar.png" id="fotoPerfil" class="foto-perfil" alt="Foto de perfil" title="Haz clic para cambiar"><br>
+     <input type="text" id="nombreUsuario" placeholder="Tu nombre">
+<br>
+<button id="guardarNombreBtn" onclick="guardarNombre()">Guardar nombre</button>
+
+
+    </label>
+    <input type="file" id="fileInput" accept="image/*">
+
+    <div class="nivel">Nivel 1</div>
+    <div class="barra-progreso">
+      <div class="barra-progreso-inner"></div>
+    </div>
+
+    <div class="insignias">
+      <h3>Logros e insignias</h3>
+      <div class="insignia" title="Primer paso"><i class="fas fa-star"></i></div>
+      <div class="insignia" title="3 lecciones completadas"><i class="fas fa-fire"></i></div>
+      <div class="insignia" title="Constancia"><i class="fas fa-medal"></i></div>
+    </div>
+
+    <div class="premium">
+      <button onclick="abrirModal()">
+        <i class="fas fa-crown"></i> Ascender a Premium
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalPremium" class="modal-overlay" onclick="cerrarModal(event)">
+    <div class="modal-box">
+      <h3>Función Premium</h3>
+      <p>Esta función estará disponible próximamente.</p>
+      <div class="modal-buttons">
+        <button class="cancelar" onclick="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+
+
+<div class="bottom-nav">
+    <a   href="https://andamaro.github.io/index.html"><i class="fas fa-home"></i></a>
+    <a href="#"><i class="fas fa-book-open"></i></a>
+    <a  href="https://andamaro.github.io/juegos.html"><i class="fas fa-gamepad"></i></a>
+    <a class="active" href="https://andamaro.github.io/perfil.html"><i class="fas fa-user"></i></a>
+    <a href="https://andamaro.github.io/configuracion.html"><i class="fas fa-gear"></i></a>
+  </div>
+
+  <audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
+  <audio id="menuAudio" src="menu.mp3" preload="auto"></audio>
+
+  <script>
+    const sonido = document.getElementById("leccionAudio");
+    const sonidoMenu = document.getElementById("menuAudio");
+
+    function playClick() {
+      sonido.currentTime = 0;
+      sonido.play();
+    }
+
+    function playMenu() {
+      sonidoMenu.currentTime = 0;
+      sonidoMenu.play();
+    }
+
+    document.querySelectorAll(".bottom-nav a").forEach(link => {
+      link.addEventListener("click", e => {
+        const destino = link.getAttribute("href");
+        if (destino && destino !== "#") {
+          e.preventDefault();
+          playMenu();
+          setTimeout(() => {
+            window.location.href = destino;
+          }, 800);
+        } else {
+          playMenu();
+        }
+      });
+    });
+
+    document.querySelectorAll('.bottom-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelectorAll('.bottom-nav a').forEach(item => item.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    function abrirModal() {
+      playClick();
+      document.getElementById('modalPremium').style.display = 'flex';
+    }
+
+    function cerrarModal(e) {
+      if (!e || e.target.id === 'modalPremium') {
+        playClick();
+        document.getElementById('modalPremium').style.display = 'none';
+      }
+    }
+
+    // Subir imagen
+    const foto = document.getElementById("fotoPerfil");
+    const input = document.getElementById("fileInput");
+
+    input.addEventListener("change", e => {
+      const archivo = e.target.files[0];
+      if (archivo) {
+        const lector = new FileReader();
+        lector.onload = function(evt) {
+          const dataURL = evt.target.result;
+          foto.src = dataURL;
+          localStorage.setItem("fotoPerfil", dataURL);
+        };
+        lector.readAsDataURL(archivo);
+        playClick();
+      }
+    });
+
+    // Cargar imagen guardada
+    window.onload = () => {
+      const guardada = localStorage.getItem("fotoPerfil");
+      if (guardada) {
+        foto.src = guardada;
+      }
+    };
+    function guardarNombre() {
+  const nombre = document.getElementById("nombreUsuario").value.trim();
+  if (nombre.length > 0) {
+    localStorage.setItem("nombreUsuario", nombre);
+    playClick();
+  }
+}
+
+// Cargar nombre guardado al entrar
+window.addEventListener("DOMContentLoaded", () => {
+  const nombre = localStorage.getItem("nombreUsuario");
+  if (nombre) {
+    document.getElementById("nombreUsuario").value = nombre;
+  }
+});
+
+  </script>
 </body>
 </html>
