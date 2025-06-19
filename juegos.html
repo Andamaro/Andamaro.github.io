@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FracVisual - Juegos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="styles.css">
+ <style>
+    
+ </style>
+</head>
+
+<body>
+<div class="top-bar">
+    <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
+
+  </div>
+
+
+    <!-- Tarjeta superior -->
+    <div class="section-card" >
+        <div class="etapa">Zona interactiva</div>
+        <div class="titulo">Juegos para practicar fracciones</div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main">
+
+        <!-- Juego 1 -->
+   <div class="node pastel" style="background-color: #e45512;">
+            <i class="fas fa-pizza-slice icon"></i>
+        </div>
+        <div class="label">Fracciones<br>en pastel</div>
+        <div class="divider"></div>
+
+        <!-- Juego 2 -->
+        <div class="node rellenar" style="background-color: #9d0ae0;">
+            <i class="fas fa-fill-drip icon"></i>
+        </div>
+        <div class="label">Rellena<br>la fracción</div>
+        <div class="divider"></div>
+
+        <!-- Juego 3 -->
+        <div class="node comparar" style="background-color: #0aa8cf;">
+            <i class="fas fa-balance-scale icon"></i>
+        </div>
+        <div class="label">¿Mayor o<br>menor?</div>
+        <div class="divider"></div>
+
+
+
+        <!-- Juego 4 -->
+        <div class="node equivalentes" style="background-color: #6FD96F;">
+            <i class="fas fa-equals icon"></i>
+        </div>
+        <div class="label">Fracciones<br>equivalentes</div>
+        <div class="banner-proximamente">
+            ¡Próximamente!
+        </div>
+
+    </div>
+<div class="bottom-nav">
+    <a  href="#"><i class="fas fa-home"></i></a>
+    <a href="#"><i class="fas fa-book-open"></i></a>
+    <a class="active"href="#"><i class="fas fa-gamepad"></i></a>
+    <a href="#"><i class="fas fa-user"></i></a>
+    <a href="#"><i class="fas fa-gear"></i></a>
+  </div>
+  <audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
+  <audio id="menuAudio" src="menu.mp3" preload="auto"></audio>
+<script>
+  const sonido = document.getElementById("leccionAudio");
+
+  document.querySelectorAll(".node").forEach(el => {
+    el.addEventListener("click", e => {
+      const enlace = el.getAttribute("href");
+      
+      // Si tiene href (es un enlace real)
+      if (enlace) {
+        e.preventDefault(); // Previene que navegue de inmediato
+        sonido.currentTime = 0;
+        sonido.play();
+
+        setTimeout(() => {
+          window.location.href = enlace;
+        }, 1000); // 1000 ms = 1 segundo de espera
+      } else {
+        // Si no tiene href, igual reproduce el sonido
+        sonido.currentTime = 0;
+        sonido.play();
+      }
+    });
+  });
+  const menuSonido = document.getElementById("menuAudio");
+
+  document.querySelectorAll(".bottom-nav a").forEach(link => {
+    link.addEventListener("click", e => {
+      const destino = link.getAttribute("href");
+
+      if (destino && destino !== "#") {
+        e.preventDefault();
+        setTimeout(() => {
+          menuSonido.currentTime = 0;
+          menuSonido.play();
+        }, 500); // Espera medio segundo
+
+        setTimeout(() => {
+          window.location.href = destino;
+        }, 1000); // Navega después de 1s (0.5s de sonido + margen)
+      } else {
+        // Si no hay destino válido (ej. "#"), solo reproduce el sonido
+        setTimeout(() => {
+          menuSonido.currentTime = 0;
+          menuSonido.play();
+        }, 500);
+      }
+    });
+  });
+</script>
+<script>
+  const menuItems = document.querySelectorAll('.bottom-nav a');
+
+  menuItems.forEach(link => {
+    link.addEventListener('click', () => {
+      menuItems.forEach(item => item.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+
+</html>
