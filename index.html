@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>FracVisual - Inicio</title>
@@ -7,7 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    html, body {
+    html,
+    body {
       touch-action: manipulation;
       overscroll-behavior: contain;
     }
@@ -42,14 +44,22 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
       z-index: 10;
+      padding: 0 16px;
+      /* Asegura espacio lateral interno sin cortar texto */
+      overflow: hidden;
+      /* Opcional: evita desbordamiento */
     }
 
     .top-bar span {
-      font-size: 1.2em;
+      font-size: 1.4em;
       font-weight: bold;
       color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     .section-card {
@@ -88,7 +98,7 @@
       height: 64px;
       border-radius: 50%;
       background-color: #3690F7;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       transition: transform 0.2s;
       cursor: pointer;
       text-decoration: none;
@@ -116,6 +126,19 @@
       width: 80px;
     }
 
+    .banner-proximamente {
+      background-color: #444;
+      /* gris oscuro */
+      color: #fff;
+      text-align: center;
+      padding: 16px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 8px;
+      margin: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -125,23 +148,35 @@
       display: flex;
       justify-content: space-around;
       padding: 8px 0;
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.5);
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.5);
+      z-index: 20;
+      /* Agrega esta línea */
     }
+
+    .node {
+      z-index: 5;
+      /* menor que la barra inferior */
+    }
+
 
     .bottom-nav a {
       font-size: 2em;
       color: #aaa;
       text-decoration: none;
+      transition: color 0.3s ease, transform 0.2s ease;
     }
 
-    .bottom-nav .active {
+    .bottom-nav a:hover {
       color: #fff;
+      transform: scale(1.2);
     }
   </style>
 </head>
+
 <body>
   <div class="top-bar">
-    <span>FracVisual</span>
+    <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
+
   </div>
 
   <div class="section-card">
@@ -149,11 +184,12 @@
     <div class="titulo">Sección 1: ¿Qué es una fracción?</div>
   </div>
 
+
   <div class="main">
     <a class="node" href="https://andamaro.github.io/definicion.html" title="Ir a Definición">
       <i class="fas fa-book-open icon"></i>
     </a>
-    <div class="label">Definición</div>
+    <div class="label">Conceptos básicos</div>
 
     <div class="divider"></div>
 
@@ -178,12 +214,90 @@
 
     <div class="divider"></div>
 
-    <a class="node" href="https://andamaro.github.io/index.html" title="Inicio">
-      <i class="fas fa-arrow-right icon"></i>
-    </a>
-    <div class="label">Inicio</div>
+    <div class="node">
+      <i class="fas fa-star icon"></i>
+    </div>
+    <div class="label">Repaso</div>
   </div>
+  <div class="section-card" style="background-color: #6FD96F;">
+    <div class="etapa">Etapa 1</div>
+    <div class="titulo">Sección 2: Representa fracciones</div>
+  </div>
+  <div class="main">
+    <a class="node" style="background-color: #6FD96F;">
+      <i class="fas fa-book-open icon"></i>
+    </a>
+    <div class="label">Conceptos básicos</div>
 
+    <div class="divider"></div>
+
+    <div class="node" style="background-color: #6FD96F;">
+      <i class="fas fa-lightbulb icon"></i>
+    </div>
+    <div class="label">Ejemplos</div>
+
+    <div class="divider"></div>
+
+    <div class="node" style="background-color: #6FD96F;">
+      <span class="icon">1</span>
+    </div>
+    <div class="label">Nivel 1</div>
+
+    <div class="divider"></div>
+
+    <div class="node" style="background-color: #6FD96F;">
+      <span class="icon">2</span>
+    </div>
+    <div class="label">Nivel 2</div>
+
+    <div class="divider"></div>
+
+    <div class="node" style="background-color: #6FD96F;">
+      <i class="fas fa-star icon"></i>
+    </div>
+    <div class="label">Repaso</div>
+  </div>
+  <div class="section-card" style="background-color: #fc11b5;">
+    <div class="etapa">Etapa 1</div>
+    <div class="titulo">Sección 3: Suma y resta de fracciones simples</div>
+  </div>
+  <div class="main">
+    <a class="node" style="background-color: #fc11b5;">
+      <i class="fas fa-book-open icon"></i>
+    </a>
+    <div class="label">Conceptos básicos</div>
+
+    <div class="divider"></div>
+
+    <div class="node" style="background-color: #fc11b5;">
+      <i class="fas fa-lightbulb icon"></i>
+    </div>
+    <div class="label">Ejemplos</div>
+
+    <div class="divider"></div>
+
+    <div class="node" style="background-color: #fc11b5;">
+      <span class="icon">1</span>
+    </div>
+    <div class="label">Nivel 1</div>
+
+    <div class="divider"></div>
+
+    <div class="node" style="background-color: #fc11b5;">
+      <span class="icon">2</span>
+    </div>
+    <div class="label">Nivel 2</div>
+
+    <div class="divider"></div>
+
+    <div class="node" style="background-color: #fc11b5;">
+      <i class="fas fa-star icon"></i>
+    </div>
+    <div class="label">Repaso</div>
+  </div>
+  <div class="banner-proximamente">
+    ¡Próximamente!
+  </div>
   <div class="bottom-nav">
     <a class="active" href="#"><i class="fas fa-home"></i></a>
     <a href="#"><i class="fas fa-book-open"></i></a>
@@ -191,5 +305,17 @@
     <a href="#"><i class="fas fa-user"></i></a>
     <a href="#"><i class="fas fa-gear"></i></a>
   </div>
+  <audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
+<script>
+  const sonido = document.getElementById("leccionAudio");
+  document.querySelectorAll(".node").forEach(el => {
+    el.addEventListener("click", () => {
+      sonido.currentTime = 0; // Reinicia el sonido si se repite
+      sonido.play();
+    });
+  });
+</script>
+
 </body>
+
 </html>
