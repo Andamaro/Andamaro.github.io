@@ -2,74 +2,68 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <title>FracVisual - Juegos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
- <link rel="stylesheet" href="styles.css">
- <style>
-    
- </style>
+  <meta charset="UTF-8">
+  <title>FracVisual - Inicio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-<div class="top-bar">
+  <div class="top-bar">
     <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
 
   </div>
 
+  <div class="section-card">
+    <div class="etapa">Zona de juegos</div>
+    <div class="titulo">Practicando con fracciones</div>
+  </div>
 
-    <!-- Tarjeta superior -->
-    <div class="section-card" >
-        <div class="etapa">Zona interactiva</div>
-        <div class="titulo">Juegos para practicar fracciones</div>
-    </div>
 
-    <!-- Contenido principal -->
-    <div class="main">
+  <div class="main">
+    <a class="node" href="#"  style="background-color: #e45512;" >
+      <i class="fas fa-pizza-slice icon"></i>
+    </a>
+    <div class="label">Fracciones de pastel</div>
 
-        <!-- Juego 1 -->
-   <div class="node pastel" style="background-color: #e45512;">
-            <i class="fas fa-pizza-slice icon"></i>
-        </div>
-        <div class="label">Fracciones<br>en pastel</div>
-        <div class="divider"></div>
+    <div class="divider"></div>
 
-        <!-- Juego 2 -->
-        <div class="node rellenar" style="background-color: #9d0ae0;">
+    <div class="node" href="#" style="background-color: #9d0ae0;">
             <i class="fas fa-fill-drip icon"></i>
-        </div>
-        <div class="label">Rellena<br>la fracción</div>
-        <div class="divider"></div>
-
-        <!-- Juego 3 -->
-        <div class="node comparar" style="background-color: #0aa8cf;">
-            <i class="fas fa-balance-scale icon"></i>
-        </div>
-        <div class="label">¿Mayor o<br>menor?</div>
-        <div class="divider"></div>
-
-
-
-        <!-- Juego 4 -->
-        <div class="node equivalentes" style="background-color: #6FD96F;">
-            <i class="fas fa-equals icon"></i>
-        </div>
-        <div class="label">Fracciones<br>equivalentes</div>
-        <div class="banner-proximamente">
-            ¡Próximamente!
-        </div>
-
     </div>
-<div class="bottom-nav">
-    <a  href="#"><i class="fas fa-home"></i></a>
+    <div class="label">Rellena la fracción</div>
+
+    <div class="divider"></div>
+
+    <div class="node" href="#"style="background-color: #0aa8cf;">
+            <i class="fas fa-balance-scale icon"></i>
+    </div>
+    <div class="label">¿Mayor o menor?</div>
+
+    <div class="divider"></div>
+
+    <div class="node" href="#"style="background-color: #6FD96F;">
+            <i class="fas fa-equals icon"></i>
+    </div>
+    <div class="label">Suma y resta</div>
+
+
+  
+  <div class="banner-proximamente">
+    ¡Espera más juegos pronto!
+  </div>
+  <div class="bottom-nav">
+    <a  href="https://andamaro.github.io/index.html"><i class="fas fa-home"></i></a>
     <a href="#"><i class="fas fa-book-open"></i></a>
-    <a class="active"href="#"><i class="fas fa-gamepad"></i></a>
+    <a class="active" href="https://andamaro.github.io/juegos.html"><i class="fas fa-gamepad"></i></a>
     <a href="#"><i class="fas fa-user"></i></a>
-    <a href="#"><i class="fas fa-gear"></i></a>
+    <a href="https://andamaro.github.io/configuracion.html"><i class="fas fa-gear"></i></a>
   </div>
   <audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
   <audio id="menuAudio" src="menu.mp3" preload="auto"></audio>
+
 <script>
   const sonido = document.getElementById("leccionAudio");
 

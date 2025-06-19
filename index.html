@@ -7,170 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    html,
-    body {
-      touch-action: manipulation;
-      overscroll-behavior: contain;
-    }
-
-    * {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Palanquin Dark', sans-serif;
-      background-color: #171B2A;
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding-top: 60px;
-      padding-bottom: 70px;
-    }
-
-    .top-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      background-color: #212638;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-      z-index: 10;
-      padding: 0 16px;
-      /* Asegura espacio lateral interno sin cortar texto */
-      overflow: hidden;
-      /* Opcional: evita desbordamiento */
-    }
-
-    .top-bar span {
-      font-size: 1.4em;
-      font-weight: bold;
-      color: #ffffff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-    }
-
-    .section-card {
-      background-color: #3690F7;
-      margin: 24px 16px;
-      border-radius: 12px;
-      padding: 14px;
-    }
-
-    .section-card .etapa {
-      font-size: 0.75em;
-      text-transform: uppercase;
-      opacity: 0.8;
-    }
-
-    .section-card .titulo {
-      font-size: 1.1em;
-      font-weight: bold;
-      margin-top: 4px;
-    }
-
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .node {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background-color: #3690F7;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: transform 0.2s;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .node .icon {
-      font-size: 1.4em;
-      color: #fff;
-      z-index: 1;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      width: 2px;
-      height: 24px;
-      background: #2c314a;
-    }
-
-    .label {
-      font-size: 0.8em;
-      color: #ccc;
-      margin-top: 6px;
-      text-align: center;
-      width: 80px;
-    }
-
-    .banner-proximamente {
-      background-color: #444;
-      /* gris oscuro */
-      color: #fff;
-      text-align: center;
-      padding: 16px;
-      font-size: 1.2em;
-      font-weight: bold;
-      border-radius: 8px;
-      margin: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #212638;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
-      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.5);
-      z-index: 20;
-      /* Agrega esta línea */
-    }
-
-    .node {
-      z-index: 5;
-      /* menor que la barra inferior */
-    }
-
-
-    .bottom-nav a {
-      font-size: 2em;
-      color: #aaa;
-      text-decoration: none;
-      transition: color 0.3s ease, transform 0.2s ease;
-    }
-
-    .bottom-nav a:hover {
-      color: #fff;
-      transform: scale(1.2);
-    }
-  </style>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -298,14 +135,16 @@
   <div class="banner-proximamente">
     ¡Próximamente!
   </div>
-  <div class="bottom-nav">
-    <a class="active" href="#"><i class="fas fa-home"></i></a>
+<div class="bottom-nav">
+    <a  class="active" href="https://andamaro.github.io/index.html"><i class="fas fa-home"></i></a>
     <a href="#"><i class="fas fa-book-open"></i></a>
-    <a href="#"><i class="fas fa-gamepad"></i></a>
+    <a  href="https://andamaro.github.io/juegos.html"><i class="fas fa-gamepad"></i></a>
     <a href="#"><i class="fas fa-user"></i></a>
-    <a href="#"><i class="fas fa-gear"></i></a>
+    <a href="https://andamaro.github.io/configuracion.html"><i class="fas fa-gear"></i></a>
   </div>
   <audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
+  <audio id="menuAudio" src="menu.mp3" preload="auto"></audio>
+
 <script>
   const sonido = document.getElementById("leccionAudio");
 
@@ -327,6 +166,41 @@
         sonido.currentTime = 0;
         sonido.play();
       }
+    });
+  });
+  const menuSonido = document.getElementById("menuAudio");
+
+  document.querySelectorAll(".bottom-nav a").forEach(link => {
+    link.addEventListener("click", e => {
+      const destino = link.getAttribute("href");
+
+      if (destino && destino !== "#") {
+        e.preventDefault();
+        setTimeout(() => {
+          menuSonido.currentTime = 0;
+          menuSonido.play();
+        }, 500); // Espera medio segundo
+
+        setTimeout(() => {
+          window.location.href = destino;
+        }, 1000); // Navega después de 1s (0.5s de sonido + margen)
+      } else {
+        // Si no hay destino válido (ej. "#"), solo reproduce el sonido
+        setTimeout(() => {
+          menuSonido.currentTime = 0;
+          menuSonido.play();
+        }, 500);
+      }
+    });
+  });
+</script>
+<script>
+  const menuItems = document.querySelectorAll('.bottom-nav a');
+
+  menuItems.forEach(link => {
+    link.addEventListener('click', () => {
+      menuItems.forEach(item => item.classList.remove('active'));
+      link.classList.add('active');
     });
   });
 </script>

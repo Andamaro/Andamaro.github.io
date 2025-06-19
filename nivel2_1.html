@@ -15,16 +15,16 @@
     }
 
     .progress-bar {
-      height: 8px;
-      background-color: #212638;
       width: 100%;
+      background-color: #444;
+      height: 20px;
     }
 
     .progress {
       height: 100%;
       width: 0%;
-      background-color: #3690F7;
-      transition: width 0.3s ease;
+      background-color: #27ae60;
+      transition: width 0.4s ease-in-out;
     }
 
     .container {
@@ -123,7 +123,7 @@
     <div class="ejercicio active">
       <h2>🍰 ¿Qué fracción representa esta imagen?</h2>
       <img src="1_2.png" alt="Tarta dividida">
-      <input type="text" placeholder="Ej. 1/2" />
+      <input type="text" placeholder="Ej. 1/3" />
       <div class="mensaje"></div>
       <button onclick="verificar(0)">Verificar</button>
     </div>
@@ -131,17 +131,17 @@
     <!-- Ejercicio 2 -->
     <div class="ejercicio">
       <h2>🍕 ¿Qué fracción representa la pizza tomada?</h2>
-      <img src="img/3-6.png" alt="Pizza">
-      <input type="text" placeholder="Ej. 1/2" />
+      <img src="2_4.JPG" alt="Pizza">
+      <input type="text" placeholder="Ej. 1/3" />
       <div class="mensaje"></div>
       <button onclick="verificar(1)">Verificar</button>
     </div>
 
     <!-- Ejercicio 3 -->
     <div class="ejercicio">
-      <h2>🟦 ¿Qué fracción está coloreada?</h2>
-      <img src="img/2-4.png" alt="Figuras azules">
-      <input type="text" placeholder="Ej. 1/2" />
+      <h2>¿Qué fracción está coloreada?</h2>
+      <img src="3_6.JPG" alt="Figuras azules">
+      <input type="text" placeholder="Ej. 1/3" />
       <div class="mensaje"></div>
       <button onclick="verificar(2)">Verificar</button>
     </div>
@@ -150,20 +150,24 @@
     <div class="ejercicio" id="final" style="display:none;">
       <h2>¡Nivel completado! 🎉</h2>
       <p>¡Muy bien! Has entendido las fracciones visuales.</p>
-      <button onclick="window.location.href='index.html'">Volver al inicio</button>
+      <button id="volverInicio">Volver al inicio</button>
     </div>
   </div>
 
+  <!-- Audios -->
   <audio id="clickAudio" src="Click.mp3" preload="auto"></audio>
+  <audio id="victoriaAudio" src="victoria.mp3" preload="auto"></audio>
 
   <script>
     const ejercicios = document.querySelectorAll('.ejercicio');
     const barra = document.getElementById("progress");
-    const audio = document.getElementById("clickAudio");
+    const audioClick = document.getElementById("clickAudio");
+    const audioVictoria = document.getElementById("victoriaAudio");
+
     const respuestasValidas = [
-      ["1/2", "2/4", "4/8", "3/6", "6/12"],
-      ["1/2", "3/6", "4/8", "6/12"],
-      ["1/2", "2/4", "4/8"]
+      ["1/2", "2/4", "4/8", "3/6", "6/12", "0.5"],
+      ["1/2", "3/6", "4/8", "6/12", "0.5"],
+      ["1/2", "2/4", "4/8", "0.5"]
     ];
 
     let actual = 0;
@@ -171,17 +175,42 @@
     function verificar(i) {
       const input = ejercicios[i].querySelector("input");
       const mensaje = ejercicios[i].querySelector(".mensaje");
-      const valor = input.value.replace(/\s/g, "").toLowerCase();
+      let valor = input.value.replace(/\s/g, "").toLowerCase();
 
-      audio.currentTime = 0;
-      audio.play();
+      // Normalizar a formato decimal si es fracción
+      if (valor.includes("/")) {
+        const [num, den] = valor.split("/").map(Number);
+        if (!isNaN(num) && !isNaN(den) && den !== 0) {
+          valor = (num / den).toFixed(2);
+        }
+      }
 
-      if (respuestasValidas[i].includes(valor)) {
+      // Sonido de clic
+      audioClick.currentTime = 0;
+      audioClick.play();
+
+      // Comparación flexible
+      const respuestas = respuestasValidas[i].map(res => {
+        if (res.includes("/")) {
+          const [n, d] = res.split("/").map(Number);
+          return (n / d).toFixed(2);
+        } else {
+          return parseFloat(res).toFixed(2);
+        }
+      });
+
+      if (respuestas.includes(parseFloat(valor).toFixed(2))) {
         mensaje.textContent = "¡Correcto!";
         mensaje.className = "mensaje correcto";
+
+        if (i === 2) {
+          audioVictoria.currentTime = 0;
+          audioVictoria.play();
+        }
+
         setTimeout(() => {
           siguiente();
-        }, 1000);
+        }, 800);
       } else {
         mensaje.textContent = "Inténtalo de nuevo";
         mensaje.className = "mensaje incorrecto";
@@ -203,6 +232,15 @@
       const porcentaje = (actual / (ejercicios.length - 1)) * 100;
       barra.style.width = porcentaje + "%";
     }
+
+    // Reproducir sonido al volver al inicio
+    document.getElementById("volverInicio").addEventListener("click", function () {
+      audioClick.currentTime = 0;
+      audioClick.play();
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 500);
+    });
 
     window.onload = actualizarBarra;
   </script>
