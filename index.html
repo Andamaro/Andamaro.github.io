@@ -186,28 +186,28 @@
 
 
   <div class="main">
-    <a class="node" href="https://andamaro.github.io/definicion.html" title="Ir a Definición">
+    <a class="node" href="https://andamaro.github.io/definicion.html" >
       <i class="fas fa-book-open icon"></i>
     </a>
     <div class="label">Conceptos básicos</div>
 
     <div class="divider"></div>
 
-    <div class="node">
+    <div class="node" href="https://andamaro.github.io/ejemplo1.html" >
       <i class="fas fa-lightbulb icon"></i>
     </div>
     <div class="label">Ejemplos</div>
 
     <div class="divider"></div>
 
-    <div class="node">
+    <div class="node" href="https://andamaro.github.io/nivel1_1.html">
       <span class="icon">1</span>
     </div>
     <div class="label">Nivel 1</div>
 
     <div class="divider"></div>
 
-    <div class="node">
+    <div class="node" href="https://andamaro.github.io/nivel2_1.html">
       <span class="icon">2</span>
     </div>
     <div class="label">Nivel 2</div>
@@ -308,10 +308,25 @@
   <audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
 <script>
   const sonido = document.getElementById("leccionAudio");
+
   document.querySelectorAll(".node").forEach(el => {
-    el.addEventListener("click", () => {
-      sonido.currentTime = 0; // Reinicia el sonido si se repite
-      sonido.play();
+    el.addEventListener("click", e => {
+      const enlace = el.getAttribute("href");
+      
+      // Si tiene href (es un enlace real)
+      if (enlace) {
+        e.preventDefault(); // Previene que navegue de inmediato
+        sonido.currentTime = 0;
+        sonido.play();
+
+        setTimeout(() => {
+          window.location.href = enlace;
+        }, 1000); // 1000 ms = 1 segundo de espera
+      } else {
+        // Si no tiene href, igual reproduce el sonido
+        sonido.currentTime = 0;
+        sonido.play();
+      }
     });
   });
 </script>
