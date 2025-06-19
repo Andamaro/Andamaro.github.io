@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Fracciones - Nivel 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Palanquin Dark', sans-serif;
+      background-color: #171B2A;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    .barra-progreso {
+      width: 100%;
+      background-color: #444;
+      height: 20px;
+    }
+
+    .progreso {
+      height: 100%;
+      width: 0%;
+      background-color: #27ae60;
+      transition: width 0.4s ease-in-out;
+    }
+
+    .container {
+      padding: 24px 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 1.5em;
+    }
+
+    .pregunta {
+      text-align: center;
+      font-size: 1.3em;
+      margin-bottom: 24px;
+    }
+
+    .fraccion {
+      display: inline-block;
+      text-align: center;
+      margin: 0 10px;
+      font-size: 1.4em;
+      vertical-align: middle;
+    }
+
+    .numerador {
+      border-bottom: 2px solid white;
+      display: block;
+      width: 40px;
+      margin: auto;
+    }
+
+    .denominador {
+      display: block;
+      width: 40px;
+      margin: auto;
+    }
+
+    .input-frac {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .input-frac input {
+      width: 48px;
+      padding: 6px;
+      font-size: 1.2em;
+      text-align: center;
+      border-radius: 8px;
+      border: none;
+      background-color: #ffffffcc;
+      color: #000;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 12px 24px;
+      background-color: #3690F7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button:hover {
+      background-color: #4aa4ff;
+    }
+
+    .feedback {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 1.2em;
+    }
+
+    .correcto {
+      color: #7ef8b5;
+    }
+
+    .incorrecto {
+      color: #f66;
+    }
+
+    .completado-box {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .completado-box .check {
+      font-size: 4em;
+      margin-bottom: 10px;
+      color: #27ae60;
+    }
+
+    .completado-box h2 {
+      font-size: 1.6em;
+      margin-bottom: 12px;
+    }
+
+    .completado-box p {
+      font-size: 1em;
+      margin-bottom: 24px;
+      color: #ddd;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Barra de progreso -->
+  <div class="barra-progreso">
+    <div class="progreso" id="barraProgreso"></div>
+  </div>
+
+  <div class="container" id="nivel">
+    <h2>🧮 Nivel 1: Suma y resta de fracciones</h2>
+
+    <!-- Ejercicio 1 -->
+    <div id="ejercicio1">
+      <p class="pregunta">
+        ¿Cuánto es
+        <span class="fraccion">
+          <span class="numerador">1</span>
+          <span class="denominador">4</span>
+        </span>
+        +
+        <span class="fraccion">
+          <span class="numerador">2</span>
+          <span class="denominador">4</span>
+        </span>
+        ?
+      </p>
+
+      <div class="input-frac">
+        <input type="number" id="num1" placeholder="↑">
+        <span>/</span>
+        <input type="number" id="den1" placeholder="↓">
+      </div>
+
+      <div id="feedback1" class="feedback"></div>
+      <button onclick="verificar1()">Verificar</button>
+    </div>
+
+    <!-- Ejercicio 2 -->
+    <div id="ejercicio2" style="display:none;">
+      <p class="pregunta">
+        ¿Cuánto es
+        <span class="fraccion">
+          <span class="numerador">3</span>
+          <span class="denominador">5</span>
+        </span>
+        −
+        <span class="fraccion">
+          <span class="numerador">1</span>
+          <span class="denominador">5</span>
+        </span>
+        ?
+      </p>
+
+      <div class="input-frac">
+        <input type="number" id="num2" placeholder="↑">
+        <span>/</span>
+        <input type="number" id="den2" placeholder="↓">
+      </div>
+
+      <div id="feedback2" class="feedback"></div>
+      <button onclick="verificar2()">Verificar</button>
+    </div>
+  </div>
+
+  <!-- Pantalla de completado -->
+  <div id="completado" class="completado-box" style="display:none;">
+    <div class="check">✔️</div>
+    <h2>¡Nivel completado!</h2>
+    <p>Ya sabes resolver sumas y restas de fracciones con el mismo denominador. 🧠</p>
+    <button onclick="window.location.href='https://andamaro.github.io/index.html'">Volver al inicio</button>
+  </div>
+
+  <!-- Audios -->
+  <audio id="audioClick" src="Click.mp3" preload="auto"></audio>
+  <audio id="audioVictoria" src="victoria.mp3" preload="auto"></audio>
+<script>
+  function verificarFraccionEquivalente(numIngresado, denIngresado, numCorrecto, denCorrecto) {
+    if (denIngresado === 0) return false; // Evita división entre cero
+    const valorIngresado = numIngresado / denIngresado;
+    const valorCorrecto = numCorrecto / denCorrecto;
+    return Math.abs(valorIngresado - valorCorrecto) < 0.0001;
+  }
+
+  function verificar1() {
+    const num = parseInt(document.getElementById('num1').value);
+    const den = parseInt(document.getElementById('den1').value);
+    document.getElementById('audioClick').play();
+
+    const feedback = document.getElementById('feedback1');
+    if (verificarFraccionEquivalente(num, den, 3, 4)) {
+      feedback.textContent = "✅ ¡Correcto!";
+      feedback.className = "feedback correcto";
+      actualizarProgreso(50);
+      setTimeout(() => {
+        document.getElementById('ejercicio1').style.display = "none";
+        document.getElementById('ejercicio2').style.display = "block";
+      }, 1000);
+    } else {
+      feedback.textContent = "❌ Intenta con una fracción equivalente.";
+      feedback.className = "feedback incorrecto";
+    }
+  }
+
+  function verificar2() {
+    const num = parseInt(document.getElementById('num2').value);
+    const den = parseInt(document.getElementById('den2').value);
+    document.getElementById('audioClick').play();
+
+    const feedback = document.getElementById('feedback2');
+    if (verificarFraccionEquivalente(num, den, 2, 5)) {
+      feedback.textContent = "✅ ¡Muy bien!";
+      feedback.className = "feedback correcto";
+      actualizarProgreso(100);
+      setTimeout(() => {
+        document.getElementById('nivel').style.display = "none";
+        document.getElementById('completado').style.display = "block";
+        document.getElementById('audioVictoria').play();
+        localStorage.setItem("nivel1_1_completado", "true");
+      }, 1000);
+    } else {
+      feedback.textContent = "❌ Esa no es equivalente.";
+      feedback.className = "feedback incorrecto";
+    }
+  }
+
+  function actualizarProgreso(porcentaje) {
+    const barra = document.getElementById("barraProgreso");
+    barra.style.width = porcentaje + "%";
+  }
+</script>
+
+
+</body>
+
+</html>
