@@ -15,6 +15,19 @@
       padding: 0;
     }
 
+    .top-bar {
+      background-color: #212638;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .top-bar img {
+      max-height: 40px;
+    }
+
     .barra-progreso {
       width: 100%;
       background-color: #444;
@@ -44,27 +57,30 @@
       text-align: center;
       font-size: 1.3em;
       margin-bottom: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .fraccion {
-      display: inline-block;
-      text-align: center;
-      margin: 0 10px;
-      font-size: 1.4em;
-      vertical-align: middle;
+    /* Círculo de fracción */
+    .pastel {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
     }
-
-    .numerador {
-      border-bottom: 2px solid white;
-      display: block;
-      width: 40px;
-      margin: auto;
-    }
-
-    .denominador {
-      display: block;
-      width: 40px;
-      margin: auto;
+    .pastel::after {
+      content: attr(data-frac);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.9em;
+      color: white;
+      pointer-events: none;
     }
 
     .input-frac {
@@ -143,7 +159,9 @@
 </head>
 
 <body>
-
+ <div class="top-bar">
+    <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
+  </div>
   <!-- Barra de progreso -->
   <div class="barra-progreso">
     <div class="progreso" id="barraProgreso"></div>
@@ -156,15 +174,10 @@
     <div id="ejercicio1">
       <p class="pregunta">
         ¿Cuánto es
-        <span class="fraccion">
-          <span class="numerador">1</span>
-          <span class="denominador">4</span>
-        </span>
+        <!-- Reemplazo de span.fraccion por círculo visual -->
+        <span class="pastel" data-frac="1/4" style="background: conic-gradient(#3690F7 25%, #212638 0 100%);"></span>
         +
-        <span class="fraccion">
-          <span class="numerador">2</span>
-          <span class="denominador">4</span>
-        </span>
+        <span class="pastel" data-frac="2/4" style="background: conic-gradient(#3690F7 50%, #212638 0 100%);"></span>
         ?
       </p>
 
@@ -182,15 +195,10 @@
     <div id="ejercicio2" style="display:none;">
       <p class="pregunta">
         ¿Cuánto es
-        <span class="fraccion">
-          <span class="numerador">3</span>
-          <span class="denominador">5</span>
-        </span>
+        <!-- Reemplazo de span.fraccion por círculo visual -->
+        <span class="pastel" data-frac="3/5" style="background: conic-gradient(#3690F7 60%, #212638 0 100%);"></span>
         −
-        <span class="fraccion">
-          <span class="numerador">1</span>
-          <span class="denominador">5</span>
-        </span>
+        <span class="pastel" data-frac="1/5" style="background: conic-gradient(#3690F7 20%, #212638 0 100%);"></span>
         ?
       </p>
 
@@ -271,7 +279,6 @@
     barra.style.width = porcentaje + "%";
   }
 </script>
-
 
 </body>
 

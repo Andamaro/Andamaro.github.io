@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>FracVisual - Juego 2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Palanquin Dark', sans-serif;
+      background-color: #171B2A;
+      color: white;
+      text-align: center;
+      padding-bottom: 60px;
+    }
+    .top-bar {
+      background-color: #212638;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+    }
+    .top-bar img {
+      max-height: 40px;
+    }
+    .back-button {
+      color: #3690F7;
+      font-size: 1.2em;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .barra-progreso {
+      width: 100%;
+      background-color: #444;
+      height: 20px;
+    }
+    .progreso {
+      height: 100%;
+      width: 0%;
+      background-color: #27ae60;
+      transition: width 0.4s ease-in-out;
+    }
+    .juego-container {
+      padding: 20px;
+    }
+    .pregunta {
+      font-size: 1.1em;
+      margin-top: 20px;
+    }
+    .mensaje {
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #6FD96F;
+    }
+    .btn-comprobar {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #3690F7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .btn-comprobar:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .btn-completado {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #3690F7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      display: none;
+    }
+    /* SVG container */
+    #svgContainer {
+      margin: 20px auto;
+      width: 200px;
+      height: 200px;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <span id="btnBack" class="back-button"><i class="fas fa-arrow-left"></i> Atrás</span>
+    <img src="logo_enc.png" alt="FracVisual">
+    <span></span>
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="barra-progreso">
+    <div id="barraProgreso" class="progreso"></div>
+  </div>
+
+  <div class="juego-container">
+    <h2>Rellena la fracción</h2>
+    <div id="svgContainer"></div>
+    <div class="pregunta" id="textoPregunta"></div>
+    <button id="btnComprobar" class="btn-comprobar">Comprobar</button>
+    <div id="mensaje" class="mensaje"></div>
+    <button id="btnCompletado" class="btn-completado">Completado</button>
+  </div>
+
+  <!-- Audios -->
+  <audio id="sonidoClick" src="ClicK.mp3" preload="auto"></audio>
+  <audio id="correcto" src="correcto.mp3" preload="auto"></audio>
+  <audio id="incorrecto" src="incorrecto.mp3" preload="auto"></audio>
+  <audio id="victoria" src="victoria.mp3" preload="auto"></audio>
+
+  <script>
+    // Ejercicios: cada objeto tiene numerador y denominador
+    const ejercicios = [
+      { numerador: 1, denominador: 2 },
+      { numerador: 2, denominador: 3 },
+      { numerador: 3, denominador: 4 },
+      { numerador: 1, denominador: 3 }
+    ];
+    let actual = 0;
+    let progreso = 0;
+    let juegoTerminado = false;
+
+    const svgContainer = document.getElementById("svgContainer");
+    const textoPregunta = document.getElementById("textoPregunta");
+    const btnComprobar = document.getElementById("btnComprobar");
+    const mensajeEl = document.getElementById("mensaje");
+    const barraEl = document.getElementById("barraProgreso");
+    const btnCompletado = document.getElementById("btnCompletado");
+    const sonidoClick = document.getElementById("sonidoClick");
+    const sonidoCorrecto = document.getElementById("correcto");
+    const sonidoIncorrecto = document.getElementById("incorrecto");
+    const sonidoVictoria = document.getElementById("victoria");
+    const btnBack = document.getElementById("btnBack");
+
+    function playClickAndThen(callback) {
+      sonidoClick.currentTime = 0;
+      sonidoClick.play();
+      setTimeout(callback, 800);
+    }
+
+    // Generar SVG con n slices; retorna lista de elementos <path>
+    function generarSVG(denominador) {
+      const svgns = "http://www.w3.org/2000/svg";
+      const width = 200, height = 200;
+      const cx = width / 2, cy = height / 2, r = Math.min(cx, cy);
+      const svg = document.createElementNS(svgns, "svg");
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      const slices = [];
+      for (let i = 0; i < denominador; i++) {
+        const startAngle = (2 * Math.PI * i) / denominador;
+        const endAngle = (2 * Math.PI * (i + 1)) / denominador;
+        const x1 = cx + r * Math.cos(startAngle);
+        const y1 = cy + r * Math.sin(startAngle);
+        const x2 = cx + r * Math.cos(endAngle);
+        const y2 = cy + r * Math.sin(endAngle);
+        const largeArc = (endAngle - startAngle) > Math.PI ? 1 : 0;
+        // Path de sector
+        const path = document.createElementNS(svgns, "path");
+        const d = [
+          `M ${cx} ${cy}`,
+          `L ${x1} ${y1}`,
+          `A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`,
+          "Z"
+        ].join(" ");
+        path.setAttribute("d", d);
+        path.setAttribute("fill", "#212638");
+        path.setAttribute("stroke", "#3690F7");
+        path.setAttribute("stroke-width", "2");
+        path.dataset.filled = "0"; // no llena
+        // Al hacer clic: alternar fill
+        path.style.cursor = "pointer";
+        path.addEventListener("click", () => {
+          if (juegoTerminado) return;
+          // alternar
+          const filled = path.dataset.filled === "1";
+          if (filled) {
+            path.dataset.filled = "0";
+            path.setAttribute("fill", "#212638");
+          } else {
+            path.dataset.filled = "1";
+            path.setAttribute("fill", "#3690F7");
+          }
+        });
+        svg.appendChild(path);
+        slices.push(path);
+      }
+      return { svg, slices };
+    }
+
+    function cargarEjercicio() {
+      if (juegoTerminado || actual < 0 || actual >= ejercicios.length) return;
+      // Limpiar contenedor SVG
+      svgContainer.innerHTML = "";
+      mensajeEl.textContent = "";
+      btnComprobar.disabled = false;
+      btnCompletado.style.display = "none";
+      // Actualizar progreso visual
+      barraEl.style.width = progreso + "%";
+
+      const { numerador, denominador } = ejercicios[actual];
+      // Texto de pregunta
+      textoPregunta.textContent = `Rellena ${numerador}/${denominador}`;
+      // Generar SVG
+      const { svg, slices } = generarSVG(denominador);
+      svgContainer.appendChild(svg);
+
+      // Guardar referencias para comprobar
+      svgContainer._slices = slices;
+      svgContainer._numerador = numerador;
+    }
+
+    function comprobar() {
+      if (juegoTerminado) return;
+      const slices = svgContainer._slices || [];
+      const numerador = svgContainer._numerador;
+      // Contar llenados
+      let count = 0;
+      slices.forEach(path => {
+        if (path.dataset.filled === "1") count++;
+      });
+      if (count === numerador) {
+        mensajeEl.textContent = "¡Correcto!";
+        sonidoCorrecto.currentTime = 0;
+        sonidoCorrecto.play();
+        progreso += 100 / ejercicios.length;
+        btnComprobar.disabled = true;
+        setTimeout(() => {
+          actual++;
+          if (actual < ejercicios.length) {
+            cargarEjercicio();
+          } else {
+            // Juego completado
+            mensajeEl.textContent = "¡Juego completado! 🎉";
+            juegoTerminado = true;
+            sonidoVictoria.currentTime = 0;
+            sonidoVictoria.play();
+            btnCompletado.style.display = "inline-block";
+            barraEl.style.width = "100%";
+          }
+        }, 1000);
+      } else {
+        mensajeEl.textContent = `Incorrecto: has rellenado ${count}, se necesitan ${numerador}.`;
+        sonidoIncorrecto.currentTime = 0;
+        sonidoIncorrecto.play();
+      }
+    }
+
+    window.onload = () => {
+      // Botón comprobar
+      btnComprobar.addEventListener("click", () => {
+        playClickAndThen(comprobar);
+      });
+      // Botón completado
+      btnCompletado.addEventListener("click", () => {
+        playClickAndThen(() => {
+          window.location.href = "https://andamaro.github.io/juegos.html";
+        });
+      });
+      // Botón atrás
+      btnBack.addEventListener("click", () => {
+        playClickAndThen(() => {
+          window.location.href = "https://andamaro.github.io/juegos.html";
+        });
+      });
+      // Iniciar
+      cargarEjercicio();
+    };
+  </script>
+</body>
+</html>
