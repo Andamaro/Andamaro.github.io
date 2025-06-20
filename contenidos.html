@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contenidos - FracVisual</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
+  <style>
+   
+    .contenido {
+      padding: 20px;
+    }
+
+    .tema {
+      margin-bottom: 20px;
+      background-color: #212638;
+      padding: 16px;
+      border-radius: 10px;
+    }
+
+    .tema h3 {
+      color: #3690F7;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    .tema p {
+      font-size: 0.95em;
+      line-height: 1.5;
+      color: #ddd;
+    }
+
+  
+  </style>
+</head>
+<body>
+
+ <div class="top-bar">
+    <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
+
+  </div>
+
+  <div class="contenido">
+    <div class="tema">
+      <h3>Etapa 1 - Sección 1: ¿Qué es una fracción?</h3>
+      <p>Una fracción representa una parte de un todo. Está formada por un numerador (la parte superior) y un denominador (la parte inferior). El numerador indica cuántas partes se toman, y el denominador en cuántas partes iguales se ha dividido el total.</p>
+    </div>
+
+    <div class="tema">
+      <h3>Etapa 1 - Sección 2: Representación de fracciones</h3>
+      <p>Las fracciones pueden representarse gráficamente como porciones de una figura (como un pastel) o sobre la recta numérica. Esto ayuda a visualizar cómo se compara la fracción con una unidad completa.</p>
+    </div>
+
+    <div class="tema">
+      <h3>Etapa 1 - Sección 3: Suma y resta de fracciones</h3>
+      <p>Para sumar o restar fracciones, es necesario que tengan el mismo denominador. Si no lo tienen, primero se deben convertir a fracciones equivalentes con denominadores iguales. Luego, se suman o restan los numeradores.</p>
+    </div>
+
+    <div class="tema">
+      <h3>Etapa 2 - Sección 1: Fracciones equivalentes</h3>
+      <p>Las fracciones equivalentes son aquellas que representan la misma cantidad, aunque tengan numeradores y denominadores diferentes. Se obtienen multiplicando o dividiendo el numerador y denominador por el mismo número.</p>
+    </div>
+
+    <div class="tema">
+      <h3>Etapa 2 - Sección 2: Fracciones propias, impropias y mixtas</h3>
+      <p>Una fracción propia tiene un numerador menor que el denominador. Una fracción impropia tiene el numerador mayor o igual. Las fracciones mixtas combinan un número entero con una fracción propia.</p>
+    </div>
+  </div>
+
+
+
+   <div class="bottom-nav">
+    <a  href="https://andamaro.github.io/index.html"><i class="fas fa-home"></i></a>
+    <a class="active" href="https://andamaro.github.io/contenidos.html"><i class="fas fa-book-open"></i></a>
+    <a  href="https://andamaro.github.io/juegos.html"><i class="fas fa-gamepad"></i></a>
+    <a href="https://andamaro.github.io/perfil.html"><i class="fas fa-user"></i></a>
+    <a href="https://andamaro.github.io/configuracion.html"><i class="fas fa-gear"></i></a>
+  </div>
+
+  <audio id="leccionAudio" src="Click.mp3" preload="auto"></audio>
+  <audio id="menuAudio" src="menu.mp3" preload="auto"></audio>
+
+  <script>
+    const sonido = document.getElementById("leccionAudio");
+    const menuSonido = document.getElementById("menuAudio");
+
+    function playClick() {
+      sonido.currentTime = 0;
+      sonido.play();
+    }
+
+    function playMenu() {
+      menuSonido.currentTime = 0;
+      menuSonido.play();
+    }
+
+    document.querySelectorAll(".bottom-nav a").forEach(link => {
+      link.addEventListener("click", e => {
+        const destino = link.getAttribute("href");
+        if (destino && destino !== "#") {
+          e.preventDefault();
+          playMenu();
+          setTimeout(() => {
+            window.location.href = destino;
+          }, 800);
+        } else {
+          playMenu();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
