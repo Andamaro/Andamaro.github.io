@@ -114,7 +114,8 @@
   </div>
 
   <!-- Audios -->
-  <audio id="sonidoClick" src="ClicK.mp3" preload="auto"></audio>
+  <!-- Asegúrate de que el nombre real del archivo sea "Click.mp3" -->
+  <audio id="sonidoClick" src="Click.mp3" preload="auto"></audio>
   <audio id="correcto" src="correcto.mp3" preload="auto"></audio>
   <audio id="incorrecto" src="incorrecto.mp3" preload="auto"></audio>
   <audio id="victoria" src="victoria.mp3" preload="auto"></audio>
@@ -145,8 +146,17 @@
 
     function playClickAndThen(callback) {
       sonidoClick.currentTime = 0;
-      sonidoClick.play();
-      setTimeout(callback, 800);
+      const playPromise = sonidoClick.play();
+      // Manejar promise en caso de navegador que requiera interacción previa
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // En algunos WebViews se requiere tocar antes; ignoramos el error
+        }).finally(() => {
+          setTimeout(callback, 800);
+        });
+      } else {
+        setTimeout(callback, 800);
+      }
     }
 
     // Generar SVG con n slices; retorna lista de elementos <path>
@@ -178,10 +188,16 @@
         path.setAttribute("stroke", "#3690F7");
         path.setAttribute("stroke-width", "2");
         path.dataset.filled = "0"; // no llena
-        // Al hacer clic: alternar fill
+        // Al hacer clic: alternar fill y sonar Click.mp3
         path.style.cursor = "pointer";
         path.addEventListener("click", () => {
           if (juegoTerminado) return;
+          // reproducir sonido de clic
+          sonidoClick.currentTime = 0;
+          const pp = sonidoClick.play();
+          if (pp !== undefined) {
+            pp.catch(()=>{}); // ignorar error si no reproduce
+          }
           // alternar
           const filled = path.dataset.filled === "1";
           if (filled) {
@@ -205,7 +221,7 @@
       mensajeEl.textContent = "";
       btnComprobar.disabled = false;
       btnCompletado.style.display = "none";
-      // Actualizar progreso visual
+      // Actualizar progreso visual (porcentaje)
       barraEl.style.width = progreso + "%";
 
       const { numerador, denominador } = ejercicios[actual];
@@ -257,7 +273,7 @@
     }
 
     window.onload = () => {
-      // Botón comprobar
+      // Botón comprobar: reproducir clic y luego comprobar
       btnComprobar.addEventListener("click", () => {
         playClickAndThen(comprobar);
       });
@@ -273,7 +289,7 @@
           window.location.href = "https://andamaro.github.io/juegos.html";
         });
       });
-      // Iniciar
+      // Iniciar primer ejercicio
       cargarEjercicio();
     };
   </script>
