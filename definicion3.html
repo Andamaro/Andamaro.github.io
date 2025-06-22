@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lección: Suma y Resta de Fracciones Simples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Palanquin Dark', sans-serif;
+            background-color: #171B2A;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .top-bar {
+            background-color: #212638;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .top-bar img {
+            max-height: 40px;
+            max-width: 90%;
+            object-fit: contain;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #444;
+            height: 20px;
+        }
+        .progress {
+            height: 100%;
+            width: 0%;
+            background-color: #27ae60;
+            transition: width 0.4s ease-in-out;
+        }
+        .container {
+            padding: 24px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .section.active {
+            display: block;
+        }
+        h2 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-align: center;
+        }
+        p {
+            font-size: 1em;
+            line-height: 1.5;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        ul {
+            text-align: left;
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+        button {
+            display: block;
+            margin: 24px auto 0;
+            background-color: #3690F7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #4aa4ff;
+        }
+        .completado-box {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .completado-box .check {
+            font-size: 4em;
+            margin-bottom: 10px;
+            color: #27ae60;
+        }
+        .completado-box h2 {
+            font-size: 1.6em;
+            margin-bottom: 12px;
+        }
+        .completado-box p {
+            font-size: 1em;
+            margin-bottom: 24px;
+            color: #ddd;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Representación con círculos */
+        .pastel {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+        }
+        .pastel div {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.2em;
+            pointer-events: none;
+        }
+        /* Barras para fracciones */
+        .barra-frac {
+            width: 200px;
+            height: 30px;
+            background-color: #212638;
+            margin: 20px auto;
+            display: flex;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .barra-frac div {
+            background-color: #3690F7;
+            height: 100%;
+        }
+        .mensaje {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .mensaje.correcto {
+            color: #27ae60;
+        }
+        .mensaje.incorrecto {
+            color: #e74c3c;
+        }
+        input {
+            display: block;
+            margin: 10px auto;
+            padding: 8px;
+            border-radius: 6px;
+            border: none;
+            width: 60%;
+            text-align: center;
+            background: #ffffffcc;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <img src="logo_enc.png" alt="FracVisual">
+    </div>
+
+    <!-- Barra de progreso -->
+    <div class="progress-bar">
+        <div id="progress" class="progress"></div>
+    </div>
+
+    <div class="container">
+        <!-- Sección 1: Introducción a suma y resta -->
+        <div class="section active">
+            <h2>¿Qué es la suma y resta de fracciones?</h2>
+            <p>Aprenderemos cómo sumar y restar fracciones simples. Para ello, necesitamos trabajar con fracciones que tengan el mismo denominador o buscar un denominador común.</p>
+            <ul>
+                <li>Si las fracciones tienen el mismo denominador, sumamos o restamos los numeradores manteniendo el denominador.</li>
+                <li>Si tienen distinto denominador, hallamos el mínimo común denominador, adaptamos cada fracción y luego sumamos o restamos numeradores.</li>
+            </ul>
+            <button onclick="siguiente()">Siguiente</button>
+        </div>
+
+        <!-- Sección 2: Misma denominador -->
+        <div class="section">
+            <h2>Sumar/Restar con mismo denominador</h2>
+            <p>Ejemplo: 2/5 + 1/5 = (2+1)/5 = 3/5.<br>Y 4/7 - 2/7 = (4-2)/7 = 2/7.</p>
+            <div class="barra-frac">
+                <div style="width:40%;"></div><div style="width:20%; background:#e74c3c;"> </div>
+            </div>
+            <p>Visualmente: coloreamos 2/5 y 1/5, suman 3/5.</p>
+            <button onclick="siguiente()">Siguiente</button>
+        </div>
+
+        <!-- Sección 3: Diferente denominador -->
+        <div class="section">
+            <h2>Sumar con distinto denominador</h2>
+            <p>Ejemplo: 1/3 + 1/6. Buscamos denominador común: 6. Convertimos 1/3 = 2/6, luego 2/6 + 1/6 = 3/6 = 1/2.</p>
+            <div class="pastel" style="background: conic-gradient(#3690F7 50%, #212638 0 100%);">
+                <div>1/2</div>
+            </div>
+            <p>Visual: 1/3 (2/6) más 1/6 da 3/6, es la mitad.</p>
+            <button onclick="siguiente()">Siguiente</button>
+        </div>
+
+        <!-- Sección 4: Restar con distinto denominador -->
+        <div class="section">
+            <h2>Restar con distinto denominador</h2>
+            <p>Ejemplo: 3/4 - 1/6. Denominador común: 12. Convertimos 3/4 = 9/12 y 1/6 = 2/12. Restamos: 9/12 - 2/12 = 7/12.</p>
+            <div class="barra-frac">
+                <div style="width:58.3333%;"></div><!-- 7/12 ~58.33% -->
+            </div>
+            <p>Visual: coloreamos 9/12 y quitamos 2/12, resultan 7/12.</p>
+            <button onclick="siguiente()">Siguiente</button>
+        </div>
+
+        <!-- Sección 5: Interactivo: suma simple -->
+        <div class="section">
+            <h2>Ejercicio: Calcula la suma</h2>
+            <p>¿Cuánto es 1/4 + 1/4?</p>
+            <div class="pastel" style="background: conic-gradient(#3690F7 50%, #212638 0 100%);">
+                <div>?</div>
+            </div>
+            <input type="text" id="inputSum" placeholder="Ej. 1/2">
+            <div id="feedbackSum" class="mensaje"></div>
+            <button onclick="verificarSum()">Verificar</button>
+        </div>
+
+        <!-- Sección 6: Interactivo: resta simple -->
+        <div class="section">
+            <h2>Ejercicio: Calcula la resta</h2>
+            <p>¿Cuánto es 3/5 - 1/5?</p>
+            <div class="barra-frac">
+                <div style="width:40%;"></div><!-- 2/5 ~40% -->
+            </div>
+            <input type="text" id="inputRes" placeholder="Ej. 2/5">
+            <div id="feedbackRes" class="mensaje"></div>
+            <button onclick="verificarRes()">Verificar</button>
+        </div>
+
+        <!-- Sección completada -->
+        <div class="section" id="completado" style="display:none;">
+            <div class="completado-box">
+                <div class="check">✔️</div>
+                <h2>¡Lección completada!</h2>
+                <p>Has aprendido y practicado suma y resta de fracciones simples. 🎉</p>
+                <button onclick="window.location.href='index.html'">¡Entendido!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audios -->
+    <audio id="audioLeccion" src="Click.mp3" preload="auto"></audio>
+    <audio id="audioVictoria" src="victoria.mp3" preload="auto"></audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let paso = 0;
+            const secciones = Array.from(document.querySelectorAll('.section')).filter(sec => sec.id !== 'completado');
+            const barra = document.getElementById('progress');
+            const completadoSection = document.getElementById('completado');
+            const audioLeccion = document.getElementById('audioLeccion');
+            const audioVictoria = document.getElementById('audioVictoria');
+
+            function playAudio(audioEl) {
+                audioEl.currentTime = 0;
+                const p = audioEl.play();
+                if (p !== undefined) p.catch(()=>{});
+            }
+
+            function actualizarBarra() {
+                const porcentaje = (paso / secciones.length) * 100;
+                barra.style.width = porcentaje + '%';
+            }
+
+            window.siguiente = function() {
+                playAudio(audioLeccion);
+                setTimeout(() => {
+                    if (paso < secciones.length - 1) {
+                        secciones[paso].classList.remove('active');
+                        paso++;
+                        secciones[paso].classList.add('active');
+                        actualizarBarra();
+                    }
+                }, 500);
+            };
+
+            window.verificarSum = function() {
+                playAudio(audioLeccion);
+                const inp = document.getElementById('inputSum');
+                let val = inp.value.replace(/\s/g, '');
+                const feedback = document.getElementById('feedbackSum');
+                // Sumar 1/4 + 1/4 = 2/4 = 1/2
+                const respuestas = ['1/2','2/4','0.5'];
+                const norm = val.toLowerCase();
+                if (respuestas.includes(norm)) {
+                    feedback.textContent = '¡Correcto!';
+                    feedback.className = 'mensaje correcto';
+                    setTimeout(() => siguiente(), 800);
+                } else {
+                    feedback.textContent = 'Inténtalo de nuevo';
+                    feedback.className = 'mensaje incorrecto';
+                }
+            };
+
+            window.verificarRes = function() {
+                playAudio(audioLeccion);
+                const inp = document.getElementById('inputRes');
+                let val = inp.value.replace(/\s/g, '');
+                const feedback = document.getElementById('feedbackRes');
+                // 3/5 - 1/5 = 2/5
+                const respuestas = ['2/5','0.4'];
+                const norm = val.toLowerCase();
+                if (respuestas.includes(norm)) {
+                    feedback.textContent = '¡Correcto!';
+                    feedback.className = 'mensaje correcto';
+                    setTimeout(() => {
+                        secciones[paso].classList.remove('active');
+                        if (completadoSection) {
+                            completadoSection.style.display = 'block';
+                            barra.style.width = '100%';
+                            playAudio(audioVictoria);
+                        }
+                        localStorage.setItem('definicion3_completada', 'true');
+                    }, 800);
+                } else {
+                    feedback.textContent = 'Inténtalo de nuevo';
+                    feedback.className = 'mensaje incorrecto';
+                }
+            };
+
+            actualizarBarra();
+        });
+    </script>
+</body>
+
+</html>

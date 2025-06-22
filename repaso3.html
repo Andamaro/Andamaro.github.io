@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Repaso Suma y Resta de Fracciones Simples</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Palanquin Dark', sans-serif;
+      background-color: #171B2A;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    .top-bar {
+      background-color: #212638;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      position: relative;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .top-bar img {
+      max-height: 40px;
+      max-width: 90%;
+      object-fit: contain;
+    }
+    .back-button {
+      position: absolute;
+      left: 10px;
+      color: #3690F7;
+      font-size: 1.2em;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .progress-bar {
+      width: 100%;
+      background-color: #444;
+      height: 20px;
+    }
+    .progress {
+      height: 100%;
+      width: 0%;
+      background-color: #27ae60;
+      transition: width 0.4s ease-in-out;
+    }
+    .container {
+      padding: 24px 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .ejercicio {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .ejercicio.active {
+      display: block;
+    }
+    h2 {
+      font-size: 1.3em;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    p {
+      text-align: left;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .pregunta {
+      text-align: center;
+      font-size: 1.1em;
+      margin-top: 12px;
+    }
+    .pastel {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
+      cursor: pointer;
+    }
+    .pastel div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.2em;
+      pointer-events: none;
+    }
+    .mensaje {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .mensaje.correcto {
+      color: #27ae60;
+    }
+    .mensaje.incorrecto {
+      color: #e74c3c;
+    }
+    button {
+      display: block;
+      margin: 20px auto 0;
+      background-color: #3690F7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #4aa4ff;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <!-- Si se desea un botón de volver atrás, descomentar:
+    <a class="back-button" onclick="history.back()"><i class="fas fa-arrow-left"></i></a>
+    -->
+    <img src="logo_enc.png" alt="FracVisual">
+  </div>
+  <div class="progress-bar">
+    <div id="progress" class="progress"></div>
+  </div>
+  <div class="container">
+    <!-- Bloque 0: Definición de suma y resta de fracciones simples -->
+    <div class="ejercicio active">
+      <h2>Definición: Suma y Resta de Fracciones Simples</h2>
+      <p>
+        La <strong>suma</strong> de fracciones con igual denominador se realiza sumando los numeradores y manteniendo el denominador. Ejemplo: 1/4 + 1/4 = 2/4.
+      </p>
+      <p>
+        La <strong>resta</strong> de fracciones con igual denominador se realiza restando los numeradores y manteniendo el denominador. Ejemplo: 3/4 - 1/4 = 2/4.
+      </p>
+      <p>
+        Para fracciones con distinto denominador, primero hallamos el denominador común, convertimos cada fracción y luego sumamos o restamos los numeradores.
+      </p>
+      <button onclick="siguiente()">Continuar</button>
+    </div>
+    <!-- Bloque 1: Ejemplo visual de suma misma denominador -->
+    <div class="ejercicio">
+      <h2>Ejemplo Visual: 1/4 + 1/4</h2>
+      <p>Tenemos dos cuartos: coloreamos 1/4 en un círculo y otro 1/4 en otro, y al unirlo equivalen a 2/4.</p>
+      <div class="pastel" style="background: conic-gradient(#3690F7 25%, #212638 0 100%);">
+        <div>1/4</div>
+      </div>
+      <div class="pastel" style="background: conic-gradient(#3690F7 25%, #212638 0 100%);">
+        <div>1/4</div>
+      </div>
+      <p>Equivale a:</p>
+      <div class="pastel" style="background: conic-gradient(#3690F7 50%, #212638 0 100%);">
+        <div>2/4</div>
+      </div>
+      <button onclick="siguiente()">Continuar</button>
+    </div>
+    <!-- Bloque 2: Ejemplo visual de resta misma denominador -->
+    <div class="ejercicio">
+      <h2>Ejemplo Visual: 3/4 - 1/4</h2>
+      <p>De 3 cuartos, quitamos 1 cuarto, quedan 2 cuartos.</p>
+      <div class="pastel" style="background: conic-gradient(#3690F7 75%, #212638 0 100%);">
+        <div>3/4</div>
+      </div>
+      <div class="pastel" style="background: #212638; width:200px; height:200px; border-radius:50%; margin: 10px auto;">
+        <div>– 1/4</div>
+      </div>
+      <p>Resultado en un círculo:</p>
+      <div class="pastel" style="background: conic-gradient(#3690F7 50%, #212638 0 100%);">
+        <div>2/4</div>
+      </div>
+      <button onclick="siguiente()">Continuar</button>
+    </div>
+    <!-- Bloque 3: Ejercicio interactivo suma 1/4 + 1/4 -->
+    <div class="ejercicio">
+      <h2>Ejercicio 1: Representa 1/4 + 1/4</h2>
+      <p class="pregunta">Selecciona 2 sectores (de 4) para mostrar 1/4 + 1/4 = 2/4:</p>
+      <div id="pastel1" class="pastel"></div>
+      <div id="feedback1" class="mensaje"></div>
+      <button onclick="verificarInteractivo()">Verificar</button>
+    </div>
+    <!-- Bloque 4: Ejercicio interactivo resta 3/4 - 1/4 -->
+    <div class="ejercicio">
+      <h2>Ejercicio 2: Representa 3/4 - 1/4</h2>
+      <p class="pregunta">Selecciona 2 sectores (de 4) para mostrar 3/4 - 1/4 = 2/4:</p>
+      <!-- Inicia con 3 sectores coloreados, y al hacer click se descartan? Simplificamos: se pide representar el resultado 2/4 -->
+      <div id="pastel2" class="pastel"></div>
+      <div id="feedback2" class="mensaje"></div>
+      <button onclick="verificarInteractivo()">Verificar</button>
+    </div>
+    <!-- Bloque final -->
+    <div class="ejercicio" id="final">
+      <h2>¡Repaso completado! 🎉</h2>
+      <p>Has repasado suma y resta de fracciones simples y representado resultados visualmente.</p>
+      <button id="volverInicio">Volver a inicio</button>
+    </div>
+  </div>
+  <!-- Audios -->
+  <audio id="clickAudio" src="Click.mp3" preload="auto"></audio>
+  <audio id="correctoAudio" src="correcto.mp3" preload="auto"></audio>
+  <audio id="incorrectoAudio" src="incorrecto.mp3" preload="auto"></audio>
+  <audio id="victoriaAudio" src="victoria.mp3" preload="auto"></audio>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bloques = Array.from(document.querySelectorAll('.ejercicio'));
+      const barra = document.getElementById('progress');
+      const audioClick = document.getElementById('clickAudio');
+      const audioCorrecto = document.getElementById('correctoAudio');
+      const audioIncorrecto = document.getElementById('incorrectoAudio');
+      const audioVictoria = document.getElementById('victoriaAudio');
+      let indice = 0;
+      let slices = [];  // para sectores interactivos
+      // Configuración de ejercicios interactivos:
+      // índice 3 => ejercicio 1 (1/4 + 1/4): denominador 4, seleccionar 2
+      // índice 4 => ejercicio 2 (3/4 - 1/4): denominador 4, seleccionar 2
+      const ejerciciosConfig = {
+        3: { denominador: 4, esperado: 2, containerId: 'pastel1' },
+        4: { denominador: 4, esperado: 2, containerId: 'pastel2' }
+      };
+
+      function playAudio(audioEl) {
+        audioEl.currentTime = 0;
+        const p = audioEl.play();
+        if (p !== undefined) p.catch(e => console.warn('Audio play error:', e));
+      }
+
+      function generarSVG(denominador, containerId) {
+        slices = [];
+        const svgns = 'http://www.w3.org/2000/svg';
+        const size = 200;
+        const cx = size/2, cy = size/2, r = size/2;
+        const svg = document.createElementNS(svgns, 'svg');
+        svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+        for (let i = 0; i < denominador; i++) {
+          const startAngle = (2 * Math.PI * i) / denominador;
+          const endAngle = (2 * Math.PI * (i + 1)) / denominador;
+          const x1 = cx + r * Math.cos(startAngle);
+          const y1 = cy + r * Math.sin(startAngle);
+          const x2 = cx + r * Math.cos(endAngle);
+          const y2 = cy + r * Math.sin(endAngle);
+          const path = document.createElementNS(svgns, 'path');
+          const d = [`M ${cx} ${cy}`, `L ${x1} ${y1}`, `A ${r} ${r} 0 0 1 ${x2} ${y2}`, 'Z'].join(' ');
+          path.setAttribute('d', d);
+          path.setAttribute('fill', '#212638');
+          path.setAttribute('stroke', '#3690F7');
+          path.setAttribute('stroke-width', '2');
+          path.dataset.filled = '0';
+          path.style.cursor = 'pointer';
+          path.addEventListener('click', () => {
+            // alternar selección
+            path.dataset.filled = path.dataset.filled === '1' ? '0' : '1';
+            path.setAttribute('fill', path.dataset.filled === '1' ? '#3690F7' : '#212638');
+            playAudio(audioClick);
+          });
+          svg.appendChild(path);
+          slices.push(path);
+        }
+        const container = document.getElementById(containerId);
+        if (container) {
+          container.innerHTML = '';
+          container.appendChild(svg);
+        } else {
+          console.warn('Contenedor no encontrado:', containerId);
+        }
+      }
+
+      function actualizarBarra() {
+        const porcentaje = (indice / (bloques.length - 1)) * 100;
+        barra.style.width = porcentaje + '%';
+      }
+
+      function siguiente() {
+        playAudio(audioClick);
+        // quitar active
+        bloques[indice].classList.remove('active');
+        indice++;
+        if (indice < bloques.length - 1) {
+          bloques[indice].classList.add('active');
+          // si es sección interactiva, generar SVG
+          if (ejerciciosConfig[indice]) {
+            const cfg = ejerciciosConfig[indice];
+            generarSVG(cfg.denominador, cfg.containerId);
+          }
+        } else if (indice === bloques.length - 1) {
+          // último bloque
+          bloques[indice].classList.add('active');
+          // reproducir victoria con retraso suave
+          setTimeout(() => playAudio(audioVictoria), 200);
+        }
+        actualizarBarra();
+      }
+
+      function verificarInteractivo() {
+        playAudio(audioClick);
+        const cfg = ejerciciosConfig[indice];
+        if (!cfg) return;
+        const seleccionados = slices.filter(p => p.dataset.filled === '1').length;
+        const feedbackEl = document.getElementById('feedback' + (indice - 2));
+        // nota: feedback1 para ejercicio índice 3 (3-2=1), feedback2 para índice4 (4-2=2)
+        if (!feedbackEl) {
+          console.warn('Elemento feedback no encontrado para índice', indice);
+          return;
+        }
+        if (seleccionados === cfg.esperado) {
+          feedbackEl.textContent = '¡Correcto!';
+          feedbackEl.className = 'mensaje correcto';
+          playAudio(audioCorrecto);
+          setTimeout(siguiente, 800);
+        } else {
+          feedbackEl.textContent = `Has seleccionado ${seleccionados}, se necesitan ${cfg.esperado}`;
+          feedbackEl.className = 'mensaje incorrecto';
+          playAudio(audioIncorrecto);
+        }
+      }
+
+      // Listeners de botones de volver
+      const btnVolver = document.getElementById('volverInicio');
+      btnVolver && btnVolver.addEventListener('click', () => {
+        playAudio(audioClick);
+        setTimeout(() => { window.location.href = 'index.html'; }, 500);
+      });
+
+      // Exponer funciones globales para botones inline
+      window.siguiente = siguiente;
+      window.verificarInteractivo = verificarInteractivo;
+
+      // Inicializar barra y, si el primer interactivo fuera el índice inicial, generarlo
+      actualizarBarra();
+      // Si se desea generar SVG inmediatamente en carga, chequear índice:
+      if (ejerciciosConfig[indice]) {
+        generarSVG(ejerciciosConfig[indice].denominador, ejerciciosConfig[indice].containerId);
+      }
+    });
+  </script>
+</body>
+</html>
