@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Nivel 1-2: Representar Fracciones Interactivo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Palanquin Dark', sans-serif;
+      background-color: #171B2A;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    .top-bar {
+      background-color: #212638;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .top-bar img {
+      max-height: 40px;
+    }
+    .progress-bar {
+      width: 100%;
+      background-color: #444;
+      height: 20px;
+    }
+    .progress {
+      height: 100%;
+      width: 0%;
+      background-color: #27ae60;
+      transition: width 0.4s ease-in-out;
+    }
+    .container {
+      padding: 24px 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .ejercicio {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .ejercicio.active {
+      display: block;
+    }
+    h2 {
+      font-size: 1.3em;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    p {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .pastel {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
+    }
+    .pastel div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.2em;
+      pointer-events: none;
+    }
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: none;
+      width: 60%;
+      text-align: center;
+      background-color: #ffffffcc;
+      color: #000;
+    }
+    .mensaje {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .mensaje.correcto {
+      color: #27ae60;
+    }
+    .mensaje.incorrecto {
+      color: #e74c3c;
+    }
+    button {
+      display: block;
+      margin: 20px auto 0;
+      background-color: #3690F7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #4aa4ff;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top-bar">
+    <img src="logo_enc.png" alt="FracVisual">
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="progress-bar">
+    <div id="progress" class="progress"></div>
+  </div>
+
+  <div class="container">
+    <!-- Ejercicio 1: identificar 2/5 -->
+    <div class="ejercicio active">
+      <h2>🍰 Identifica la fracción</h2>
+      <p>¿Qué fracción representa este círculo?</p>
+      <div class="pastel" style="background: conic-gradient(#3690F7 40%, #212638 0 100%);">
+        <div>?</div>
+      </div>
+      <input type="text" id="input0" />
+      <div id="feedback0" class="mensaje"></div>
+      <button onclick="verificar(0)">Verificar</button>
+    </div>
+
+    <!-- Ejercicio 2: completar 3/5 -->
+    <div class="ejercicio">
+      <h2>🍕 Completa la fracción</h2>
+      <p>Rellena el círculo para representar 3/5 y luego escribe la fracción equivalente.</p>
+      <div id="pastel2" class="pastel"></div>
+      <input type="text" id="input1" />
+      <div id="feedback1" class="mensaje"></div>
+      <button onclick="verificar(1)">Verificar</button>
+    </div>
+
+    <!-- Ejercicio 3: identificar equivalente a 4/6 -->
+    <div class="ejercicio">
+      <h2>🥧 Fracción equivalente</h2>
+      <p>¿Cuál de estas fracciones es equivalente a 4/6? (puedes ingresar otra equivalente)</p>
+      <div class="ejemplo-frac" style="margin: 20px auto; text-align:center;">
+        <div class="pastel" style="background: conic-gradient(#3690F7 66.6667%, #212638 0 100%); width:150px; height:150px;">
+          <div>4/6</div>
+        </div>
+      </div>
+      <input type="text" id="input2"  />
+      <div id="feedback2" class="mensaje"></div>
+      <button onclick="verificar(2)">Verificar</button>
+    </div>
+
+    <!-- Final -->
+    <div class="ejercicio" id="final" style="display:none;">
+      <h2>¡Nivel completado! 🎉</h2>
+      <p>¡Muy bien! Has practicado la representación de fracciones. </p>
+      <button id="volverInicio">Volver al inicio</button>
+    </div>
+  </div>
+
+  <!-- Audios -->
+  <audio id="clickAudio" src="Click.mp3" preload="auto"></audio>
+  <audio id="correctoAudio" src="correcto.mp3" preload="auto"></audio>
+  <audio id="incorrectoAudio" src="incorrecto.mp3" preload="auto"></audio>
+  <audio id="victoriaAudio" src="victoria.mp3" preload="auto"></audio>
+
+  <script>
+    const ejercicios = document.querySelectorAll('.ejercicio');
+    const barra = document.getElementById("progress");
+    const audioClick = document.getElementById("clickAudio");
+    const audioCorrecto = document.getElementById("correctoAudio");
+    const audioIncorrecto = document.getElementById("incorrectoAudio");
+    const audioVictoria = document.getElementById("victoriaAudio");
+    let actual = 0;
+
+    // Para ejercicio 2 (rellenar 3/5), generaremos interactivo con SVG
+    function generarSVG(den, numerador) {
+      const svgns = "http://www.w3.org/2000/svg";
+      const size = 200;
+      const cx = size/2, cy = size/2, r = size/2;
+      const svg = document.createElementNS(svgns, "svg");
+      svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+      const slices = [];
+      for (let i = 0; i < den; i++) {
+        const startAngle = (2 * Math.PI * i) / den;
+        const endAngle = (2 * Math.PI * (i + 1)) / den;
+        const x1 = cx + r * Math.cos(startAngle);
+        const y1 = cy + r * Math.sin(startAngle);
+        const x2 = cx + r * Math.cos(endAngle);
+        const y2 = cy + r * Math.sin(endAngle);
+        const largeArc = (endAngle - startAngle) > Math.PI ? 1 : 0;
+        const path = document.createElementNS(svgns, "path");
+        const d = [
+          `M ${cx} ${cy}`,
+          `L ${x1} ${y1}`,
+          `A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`,
+          "Z"
+        ].join(" ");
+        path.setAttribute("d", d);
+        path.setAttribute("fill", "#212638");
+        path.setAttribute("stroke", "#3690F7");
+        path.setAttribute("stroke-width", "2");
+        path.dataset.filled = "0";
+        path.style.cursor = "pointer";
+        path.addEventListener("click", () => {
+          // sonar click al seleccionar
+          audioClick.currentTime = 0;
+          audioClick.play().catch(()=>{});
+          // alternar
+          if (path.dataset.filled === "1") {
+            path.dataset.filled = "0";
+            path.setAttribute("fill", "#212638");
+          } else {
+            path.dataset.filled = "1";
+            path.setAttribute("fill", "#3690F7");
+          }
+        });
+        svg.appendChild(path);
+        slices.push(path);
+      }
+      return { svg, slices };
+    }
+
+    function cargarEjercicio() {
+      // actualización de barra
+      barra.style.width = ((actual)/(ejercicios.length - 1))*100 + "%";
+      // para ejercicio 2, inicializar SVG
+      if (actual === 1) {
+        const cont = document.getElementById("pastel2");
+        cont.innerHTML = "";
+        const { svg, slices } = generarSVG(5, 3);
+        cont.appendChild(svg);
+        // guardar referencia
+        cont._slices = slices;
+      }
+    }
+
+    // Respuestas válidas
+    const respuestasValidas = [
+      // ejercicio1: 2/5
+      ["2/5","4/10","0.4"],
+      // ejercicio2: 3/5 (rellenar)
+      ["3/5","6/10","0.6"],
+      // ejercicio3: equivalente a 4/6 -> 2/3
+      ["2/3","4/6","6/9","0.6667","0.66666","0.67"]
+    ];
+
+    function verificar(i) {
+      const mensajeEl = document.getElementById(`feedback${i}`);
+      audioClick.currentTime = 0;
+      audioClick.play().catch(()=>{});
+      // ejercicio 1 y 3: input sólo
+      if (i === 0 || i === 2) {
+        const inp = document.getElementById(`input${i}`);
+        let val = inp.value.replace(/\s/g,"").toLowerCase();
+        if (val.includes("/")) {
+          const [n,d]=val.split("/").map(Number);
+          if (!isNaN(n)&&!isNaN(d)&&d!==0) {
+            val = (n/d).toFixed(4);
+          }
+        }
+        const validas = respuestasValidas[i].map(r=>{
+          if (r.includes("/")) {
+            const [n,d]=r.split("/").map(Number);
+            return (n/d).toFixed(4);
+          }
+          return parseFloat(r).toFixed(4);
+        });
+        const norm = parseFloat(val).toFixed(4);
+        if (validas.includes(norm)) {
+          mensajeEl.textContent = "¡Correcto!";
+          mensajeEl.className = "mensaje correcto";
+          audioCorrecto.currentTime = 0;
+          audioCorrecto.play().catch(()=>{});
+          setTimeout(siguiente, 800);
+        } else {
+          mensajeEl.textContent = "Inténtalo de nuevo";
+          mensajeEl.className = "mensaje incorrecto";
+          audioIncorrecto.currentTime = 0;
+          audioIncorrecto.play().catch(()=>{});
+        }
+      }
+      else if (i === 1) {
+        // ejercicio 2: contar sectores rellenos y verificar 3/5
+        const cont = document.getElementById("pastel2");
+        const slices = cont._slices || [];
+        let count = 0;
+        slices.forEach(p=>{ if (p.dataset.filled==="1") count++; });
+        if (count === 3) {
+          // luego verificar input
+          const inp = document.getElementById("input1");
+          let val = inp.value.replace(/\s/g,"").toLowerCase();
+          if (val.includes("/")) {
+            const [n,d]=val.split("/").map(Number);
+            if (!isNaN(n)&&!isNaN(d)&&d!==0) {
+              val = (n/d).toFixed(4);
+            }
+          }
+          const validas = respuestasValidas[1].map(r=>{
+            if (r.includes("/")) {
+              const [n,d]=r.split("/").map(Number);
+              return (n/d).toFixed(4);
+            }
+            return parseFloat(r).toFixed(4);
+          });
+          const norm = parseFloat(val).toFixed(4);
+          if (validas.includes(norm)) {
+            mensajeEl.textContent = "¡Correcto!";
+            mensajeEl.className = "mensaje correcto";
+            audioCorrecto.currentTime = 0;
+            audioCorrecto.play().catch(()=>{});
+            setTimeout(siguiente, 800);
+          } else {
+            mensajeEl.textContent = "Fracción correcta pero formato incorrecto";
+            mensajeEl.className = "mensaje incorrecto";
+            audioIncorrecto.currentTime = 0;
+            audioIncorrecto.play().catch(()=>{});
+          }
+        } else {
+          mensajeEl.textContent = `Has rellenado ${count}, se necesitan 3`;
+          mensajeEl.className = "mensaje incorrecto";
+          audioIncorrecto.currentTime = 0;
+          audioIncorrecto.play().catch(()=>{});
+        }
+      }
+    }
+
+    function siguiente() {
+      ejercicios[actual].classList.remove("active");
+      actual++;
+      if (actual < ejercicios.length - 1) {
+        ejercicios[actual].classList.add("active");
+        cargarEjercicio();
+      } else {
+        // mostrar final
+        ejercicios[actual].style.display = "block";
+        // reproducir sonido de victoria
+        audioVictoria.currentTime = 0;
+        audioVictoria.play().catch(()=>{});
+      }
+      // actualizar barra
+      barra.style.width = ((actual)/(ejercicios.length-1))*100 + "%";
+    }
+
+    window.onload = () => {
+      // Asociar "Volver al inicio"
+      document.getElementById("volverInicio").addEventListener("click", ()=>{
+        audioClick.currentTime = 0;
+        audioClick.play().catch(()=>{});
+        setTimeout(()=> window.location.href='index.html', 500);
+      });
+      cargarEjercicio();
+    };
+  </script>
+</body>
+</html>

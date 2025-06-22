@@ -16,18 +16,28 @@
         }
 
         .progress-bar {
-            height: 8px;
-            background-color: #212638;
-            width: 100%;
-        }
+      width: 100%;
+      background-color: #444;
+      height: 20px;
+    }
+.top-bar {
+      background-color: #212638;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
 
-        .progress {
-            height: 100%;
-            width: 0%;
-            background-color: #3690F7;
-            transition: width 0.3s ease;
-        }
-
+    .top-bar img {
+      max-height: 40px;
+    }
+    .progress {
+      height: 100%;
+      width: 0%;
+      background-color: #27ae60;
+      transition: width 0.4s ease-in-out;
+    }
         .container {
             padding: 24px 20px;
             max-width: 500px;
@@ -139,12 +149,14 @@
 </head>
 
 <body>
+ <div class="top-bar">
+    <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
+  </div>
 
     <!-- Barra de progreso -->
     <div class="progress-bar">
-        <div id="progress" class="progress"></div>
-    </div>
-
+    <div id="progress" class="progress"></div>
+  </div>
     <!-- Contenedor principal -->
     <div class="container">
 

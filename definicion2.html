@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lección: Representar Fracciones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Palanquin Dark', sans-serif;
+            background-color: #171B2A;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .top-bar {
+            background-color: #212638;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .top-bar img {
+            max-height: 40px;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #444;
+            height: 20px;
+        }
+        .progress {
+            height: 100%;
+            width: 0%;
+            background-color: #27ae60;
+            transition: width 0.4s ease-in-out;
+        }
+        .container {
+            padding: 24px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .section.active {
+            display: block;
+        }
+        h2 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-align: center;
+        }
+        p {
+            font-size: 1em;
+            line-height: 1.5;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        ul {
+            text-align: left;
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+        button {
+            display: block;
+            margin: 24px auto 0;
+            background-color: #3690F7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #4aa4ff;
+        }
+        .completado-box {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .completado-box .check {
+            font-size: 4em;
+            margin-bottom: 10px;
+            color: #27ae60;
+        }
+        .completado-box h2 {
+            font-size: 1.6em;
+            margin-bottom: 12px;
+        }
+        .completado-box p {
+            font-size: 1em;
+            margin-bottom: 24px;
+            color: #ddd;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Para representación con círculos */
+        .pastel {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+        }
+        .pastel div {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.2em;
+            pointer-events: none;
+        }
+        /* Para barras (rectángulos) */
+        .barra-frac {
+            width: 200px;
+            height: 30px;
+            background-color: #212638;
+            margin: 20px auto;
+            display: flex;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .barra-frac div {
+            background-color: #3690F7;
+            height: 100%;
+        }
+        /* Para recta numérica */
+        .num-line {
+            width: 100%;
+            max-width: 300px;
+            height: 40px;
+            margin: 20px auto;
+            position: relative;
+        }
+        .num-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 2px;
+            background: #fff;
+        }
+        .num-line .tick {
+            position: absolute;
+            width: 2px;
+            height: 10px;
+            background: #fff;
+            top: calc(50% - 5px);
+        }
+        .num-line .label {
+            position: absolute;
+            top: calc(50% + 8px);
+            font-size: 0.9em;
+            color: #ccc;
+            transform: translateX(-50%);
+        }
+        .mensaje {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .mensaje.correcto {
+            color: #27ae60;
+        }
+        .mensaje.incorrecto {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+  <div class="top-bar">
+    <img src="logo_enc.png" alt="FracVisual">
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="progress-bar">
+    <div id="progress" class="progress"></div>
+  </div>
+
+  <div class="container">
+    <!-- Sección 1: Introducción a la representación -->
+    <div class="section active">
+      <h2>¿Cómo representar una fracción?</h2>
+      <p>Existen varias formas de mostrar una fracción gráficamente:</p>
+      <ul>
+        <li><strong>Círculos o “pasteles”</strong>: dividir un círculo en partes iguales y colorear la proporción.</li>
+        <li><strong>Barras o rectángulos</strong>: dividir una barra en segmentos iguales y colorear los segmentos correspondientes.</li>
+        <li><strong>Recta numérica</strong>: ubicar el punto que corresponde a la fracción en la recta entre 0 y 1 (o más allá).</li>
+      </ul>
+      <button onclick="siguiente()">Siguiente</button>
+    </div>
+
+    <!-- Sección 2: Círculo / pastel ejemplo -->
+    <div class="section">
+      <h2>Representación con círculo</h2>
+      <p>Para mostrar 2/5, dividimos el círculo en 5 partes iguales y coloreamos 2.</p>
+      <div class="pastel" style="background: conic-gradient(#3690F7 40%, #212638 0 100%);">
+        <div>2/5</div>
+      </div>
+      <button onclick="siguiente()">Siguiente</button>
+    </div>
+
+    <!-- Sección 3: Barra / rectángulo ejemplo -->
+    <div class="section">
+      <h2>Representación con barra</h2>
+      <p>Para mostrar 3/4, dividimos la barra en 4 segmentos y coloreamos 3.</p>
+      <div class="barra-frac">
+        <div style="width:75%;"></div>
+      </div>
+      <button onclick="siguiente()">Siguiente</button>
+    </div>
+
+    <!-- Sección 4: Recta numérica ejemplo -->
+    <div class="section">
+      <h2>Representación en recta numérica</h2>
+      <p>Para mostrar 1/3 en la recta de 0 a 1:</p>
+      <div class="num-line" id="numLine">
+        <!-- Ticks generados por JS -->
+      </div>
+      <button onclick="siguiente()">Siguiente</button>
+    </div>
+
+    <!-- Sección 5: Interactivo: identificar fracción en círculo -->
+    <div class="section">
+      <h2>Ejercicio: Identifica la fracción</h2>
+      <p class="pregunta">¿Qué fracción ves coloreada?</p>
+      <div class="pastel" id="ejPastel" style="background: conic-gradient(#3690F7 33.3333%, #212638 0 100%);">
+        <div>?</div>
+      </div>
+      <input type="text" id="inputFrac" placeholder="Ej. 1/3" style="display:block; margin:10px auto; padding:8px; border-radius:6px; border:none; width:60%; text-align:center; background:#ffffffcc; color:#000;">
+      <div id="feedback" class="mensaje"></div>
+      <button onclick="verificar()">Verificar</button>
+    </div>
+
+    <!-- Sección completada -->
+    <div class="section" id="completado" style="display:none;">
+      <div class="completado-box">
+        <div class="check">✔️</div>
+        <h2>¡Lección completada!</h2>
+        <p>Has aprendido diferentes formas de representar fracciones. 🎉</p>
+        <button onclick="window.location.href='https://andamaro.github.io/index.html'">¡Entendido!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audios -->
+  <audio id="audioLeccion" src="Click.mp3" preload="auto"></audio>
+  <audio id="audioVictoria" src="victoria.mp3" preload="auto"></audio>
+
+  <script>
+    let paso = 0;
+    const secciones = document.querySelectorAll(".section:not(#completado)");
+    const barra = document.getElementById("progress");
+    const completadoSection = document.getElementById("completado");
+    const audioLeccion = document.getElementById("audioLeccion");
+    const audioVictoria = document.getElementById("audioVictoria");
+
+    function siguiente() {
+        audioLeccion.currentTime = 0;
+        audioLeccion.play().catch(()=>{});
+        setTimeout(() => {
+            if (paso < secciones.length - 1) {
+                secciones[paso].classList.remove("active");
+                paso++;
+                secciones[paso].classList.add("active");
+                actualizarBarra();
+                // Si entramos en la sección 4 (recta numérica), generamos ticks
+                if (paso === 3) {
+                    generarRecta(3); // ejemplo 1/3, 3 divisiones
+                }
+            }
+        }, 800);
+    }
+
+    function actualizarBarra() {
+        const porcentaje = (paso / secciones.length) * 100;
+        barra.style.width = porcentaje + "%";
+    }
+
+    function generarRecta(divisiones) {
+        const cont = document.getElementById("numLine");
+        cont.innerHTML = "";
+        const ancho = cont.clientWidth;
+        // Crear ticks en 0, 1/divisiones, ..., 1
+        for (let i = 0; i <= divisiones; i++) {
+            const tick = document.createElement("div");
+            tick.className = "tick";
+            const label = document.createElement("div");
+            label.className = "label";
+            label.textContent = i + "/" + divisiones;
+            // Posición relativa
+            const porcentaje = (i / divisiones) * 100;
+            tick.style.left = porcentaje + "%";
+            label.style.left = porcentaje + "%";
+            cont.appendChild(tick);
+            cont.appendChild(label);
+        }
+    }
+
+    function verificar() {
+      const audioClick = document.getElementById("audioLeccion");
+      audioClick.currentTime = 0;
+      audioClick.play().catch(()=>{});
+      const inp = document.getElementById('inputFrac');
+      let val = inp.value.replace(/\s/g, "").toLowerCase();
+      if (val.includes("/")) {
+        const [n,d] = val.split("/").map(Number);
+        if (!isNaN(n) && !isNaN(d) && d!==0) {
+          val = (n/d).toFixed(4);
+        }
+      }
+      // Representación mostrada es 1/3
+      const validas = ["1/3","2/6","0.3333","0.33333","0.33"];
+      const decs = validas.map(r=>{
+        if (r.includes("/")) {
+          const [n,d]=r.split("/").map(Number);
+          return (n/d).toFixed(4);
+        }
+        return parseFloat(r).toFixed(4);
+      });
+      const valorNorm = parseFloat(val).toFixed(4);
+      const feedback = document.getElementById('feedback');
+      if (decs.includes(valorNorm)) {
+        feedback.textContent = "¡Correcto!";
+        feedback.className = "mensaje correcto";
+        // Al completar el interactivo, pasar a completado
+        setTimeout(() => {
+          secciones[paso].classList.remove("active");
+          completadoSection.style.display = "block";
+          barra.style.width = "100%";
+          audioVictoria.currentTime = 0;
+          audioVictoria.play().catch(()=>{});
+          localStorage.setItem("definicion2_completada", "true");
+        }, 800);
+      } else {
+        feedback.textContent = "Inténtalo de nuevo";
+        feedback.className = "mensaje incorrecto";
+      }
+    }
+
+    window.onload = actualizarBarra;
+  </script>
+
+</body>
+
+</html>
