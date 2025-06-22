@@ -19,10 +19,13 @@
       align-items: center;
       justify-content: center;
       height: 50px;
+      position: relative;
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     .top-bar img {
       max-height: 40px;
+      max-width: 90%;
+      object-fit: contain;
     }
     .back-button {
       position: absolute;
@@ -70,15 +73,33 @@
       font-size: 1.1em;
       margin-top: 12px;
     }
-    input {
-      display: block;
-      margin: 10px auto;
-      padding: 10px;
-      font-size: 1em;
-      border-radius: 6px;
-      border: none;
-      width: 60%;
+    .pastel {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
+      cursor: pointer;
+    }
+    .pastel div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.2em;
+      pointer-events: none;
+    }
+    .mensaje {
       text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .mensaje.correcto {
+      color: #27ae60;
+    }
+    .mensaje.incorrecto {
+      color: #e74c3c;
     }
     button {
       display: block;
@@ -105,42 +126,12 @@
         transform: translateY(0);
       }
     }
-    .mensaje {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    .mensaje.correcto {
-      color: #27ae60;
-    }
-    .mensaje.incorrecto {
-      color: #e74c3c;
-    }
-    /* Círculo visual para interactividad */
-    .pastel {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      margin: 20px auto;
-      position: relative;
-      cursor: pointer;
-    }
-    .pastel div {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 1.2em;
-      pointer-events: none;
-    }
   </style>
 </head>
 <body>
- <div class="top-bar">
+  <div class="top-bar">
     <img src="logo_enc.png" alt="FracVisual">
   </div>
-
   <div class="progress-bar">
     <div id="progress" class="progress"></div>
   </div>
@@ -148,8 +139,7 @@
     <!-- Bloque 1: Definición de fracción -->
     <div class="ejercicio active">
       <h2>Definición de fracción</h2>
-      <p>Representar una fracción es mostrar, de manera visual o concreta, cómo se divide un todo en partes iguales y cuántas de esas partes estamos considerando. Por ejemplo, si tenemos una pizza dividida en 4 partes iguales y comemos 1,
-         podemos mostrar esa fracción (1/4) coloreando una de las cuatro partes.</p>
+      <p>Representar una fracción es mostrar, de manera visual o concreta, cómo se divide un todo en partes iguales y cuántas de esas partes estamos considerando. Por ejemplo, si tenemos una pizza dividida en 4 partes iguales y comemos 1, podemos mostrar esa fracción (1/4) coloreando una de las cuatro partes.</p>
       <button onclick="siguiente()">Continuar</button>
     </div>
     <!-- Bloque 2: Representación visual -->
@@ -173,111 +163,123 @@
       <button id="volverInicio">Volver a inicio</button>
     </div>
   </div>
+  <!-- Audios -->
   <audio id="clickAudio" src="Click.mp3" preload="auto"></audio>
   <audio id="correctoAudio" src="correcto.mp3" preload="auto"></audio>
   <audio id="incorrectoAudio" src="incorrecto.mp3" preload="auto"></audio>
   <audio id="victoriaAudio" src="victoria.mp3" preload="auto"></audio>
-  <script>
-    const bloques = Array.from(document.querySelectorAll('.ejercicio'));
-    const barra = document.getElementById('progress');
-    const audioClick = document.getElementById('clickAudio');
-    const audioCorrecto = document.getElementById('correctoAudio');
-    const audioIncorrecto = document.getElementById('incorrectoAudio');
-    const audioVictoria = document.getElementById('victoriaAudio');
-    let indice = 0;
-    let slices3 = [];
-    
-    function generarSVG3(denominador, containerId) {
-      slices3 = []; // reset
-      const svgns = 'http://www.w3.org/2000/svg';
-      const size = 200;
-      const cx = size/2, cy = size/2, r = size/2;
-      const svg = document.createElementNS(svgns, 'svg');
-      svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
-      for (let i = 0; i < denominador; i++) {
-        const startAngle = (2 * Math.PI * i) / denominador;
-        const endAngle = (2 * Math.PI * (i + 1)) / denominador;
-        const x1 = cx + r * Math.cos(startAngle);
-        const y1 = cy + r * Math.sin(startAngle);
-        const x2 = cx + r * Math.cos(endAngle);
-        const y2 = cy + r * Math.sin(endAngle);
-        const path = document.createElementNS(svgns, 'path');
-        const d = [`M ${cx} ${cy}`, `L ${x1} ${y1}`, `A ${r} ${r} 0 0 1 ${x2} ${y2}`, 'Z'].join(' ');
-        path.setAttribute('d', d);
-        path.setAttribute('fill', '#212638');
-        path.setAttribute('stroke', '#3690F7');
-        path.setAttribute('stroke-width', '2');
-        path.dataset.filled = '0';
-        path.style.cursor = 'pointer';
-        path.addEventListener('click', () => {
-          path.dataset.filled = path.dataset.filled === '1' ? '0' : '1';
-          path.setAttribute('fill', path.dataset.filled === '1' ? '#3690F7' : '#212638');
-          audioClick.currentTime = 0;
-          audioClick.play().catch(()=>{});
-        });
-        svg.appendChild(path);
-        slices3.push(path);
-      }
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      container.appendChild(svg);
-    }
-
-    function siguiente() {
-      audioClick.currentTime = 0;
-      audioClick.play().catch(()=>{});
-      bloques[indice].classList.remove('active');
-      indice++;
-      if (indice < bloques.length - 1) {
-        bloques[indice].classList.add('active');
-      } else if (indice === bloques.length - 1) {
-        // Mostrar bloque final
-        bloques[indice].classList.add('active');
-        // Reproducir sonido de victoria con ligero retraso
-        setTimeout(() => {
-          audioVictoria.currentTime = 0;
-          audioVictoria.play().catch((e) => console.warn('No se pudo reproducir victoriaAudio:', e));
-        }, 200);
-      }
-      actualizarBarra();
-      if (indice === 2) generarSVG3(3, 'pastel3');
-    }
-
-    function actualizarBarra() {
-      const porcentaje = (indice / (bloques.length - 1)) * 100;
-      barra.style.width = porcentaje + '%';
-    }
-
-    function verificarInteractivo() {
-      audioClick.currentTime = 0;
-      audioClick.play().catch(()=>{});
-      const seleccionados = slices3.filter(p => p.dataset.filled === '1').length;
-      if (seleccionados === 1) {
-        document.getElementById('feedback3').textContent = '¡Correcto!';
-        document.getElementById('feedback3').className = 'mensaje correcto';
-        audioCorrecto.currentTime = 0;
-        audioCorrecto.play().catch(()=>{});
-        setTimeout(siguiente, 800);
-      } else {
-        document.getElementById('feedback3').textContent = `Has seleccionado ${seleccionados}, se necesita 1`;
-        document.getElementById('feedback3').className = 'mensaje incorrecto';
-        audioIncorrecto.currentTime = 0;
-        audioIncorrecto.play().catch(()=>{});
-      }
-    }
-
-    window.onload = () => {
-      actualizarBarra();
-      const botonVolver = document.getElementById('volverInicio');
-      if (botonVolver) {
-        botonVolver.addEventListener('click', () => {
-          audioClick.currentTime = 0;
-          audioClick.play().catch(()=>{});
-          setTimeout(() => window.location.href = 'index.html', 500);
-        });
-      }
-    };
-  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bloques = Array.from(document.querySelectorAll('.ejercicio'));
+      const barra = document.getElementById('progress');
+      const audioClick = document.getElementById('clickAudio');
+      const audioCorrecto = document.getElementById('correctoAudio');
+      const audioIncorrecto = document.getElementById('incorrectoAudio');
+      const audioVictoria = document.getElementById('victoriaAudio');
+      const btnBack = document.getElementById('btnBack');
+      let indice = 0;
+      let slices3 = [];
+
+      function playAudio(audioEl) {
+        audioEl.currentTime = 0;
+        const p = audioEl.play();
+        if (p !== undefined) p.catch(e => console.warn('Audio play failed:', e));
+      }
+
+      function generarSVG3(denominador, containerId) {
+        slices3 = [];
+        const svgns = 'http://www.w3.org/2000/svg';
+        const size = 200;
+        const cx = size/2, cy = size/2, r = size/2;
+        const svg = document.createElementNS(svgns, 'svg');
+        svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+        for (let i = 0; i < denominador; i++) {
+          const startAngle = (2 * Math.PI * i) / denominador;
+          const endAngle = (2 * Math.PI * (i + 1)) / denominador;
+          const x1 = cx + r * Math.cos(startAngle);
+          const y1 = cy + r * Math.sin(startAngle);
+          const x2 = cx + r * Math.cos(endAngle);
+          const y2 = cy + r * Math.sin(endAngle);
+          const path = document.createElementNS(svgns, 'path');
+          const d = [`M ${cx} ${cy}`, `L ${x1} ${y1}`, `A ${r} ${r} 0 0 1 ${x2} ${y2}`, 'Z'].join(' ');
+          path.setAttribute('d', d);
+          path.setAttribute('fill', '#212638');
+          path.setAttribute('stroke', '#3690F7');
+          path.setAttribute('stroke-width', '2');
+          path.dataset.filled = '0';
+          path.style.cursor = 'pointer';
+          path.addEventListener('click', () => {
+            path.dataset.filled = path.dataset.filled === '1' ? '0' : '1';
+            path.setAttribute('fill', path.dataset.filled === '1' ? '#3690F7' : '#212638');
+            playAudio(audioClick);
+          });
+          svg.appendChild(path);
+          slices3.push(path);
+        }
+        const container = document.getElementById(containerId);
+        if (container) {
+          container.innerHTML = '';
+          container.appendChild(svg);
+        } else console.warn('Container not found:', containerId);
+      }
+
+      function actualizarBarra() {
+        const porcentaje = (indice / (bloques.length - 1)) * 100;
+        barra.style.width = porcentaje + '%';
+      }
+
+      function siguiente() {
+        playAudio(audioClick);
+        bloques[indice].classList.remove('active');
+        indice++;
+        if (indice < bloques.length - 1) {
+          bloques[indice].classList.add('active');
+        } else if (indice === bloques.length - 1) {
+          bloques[indice].classList.add('active');
+          // Reproducir victoria con retraso
+          setTimeout(() => playAudio(audioVictoria), 200);
+        }
+        actualizarBarra();
+        if (indice === 2) generarSVG3(3, 'pastel3');
+      }
+
+      function verificarInteractivo() {
+        playAudio(audioClick);
+        const seleccionados = slices3.filter(p => p.dataset.filled === '1').length;
+        const feedbackEl = document.getElementById('feedback3');
+        if (!feedbackEl) return console.warn('Feedback element not found');
+        if (seleccionados === 1) {
+          feedbackEl.textContent = '¡Correcto!';
+          feedbackEl.className = 'mensaje correcto';
+          playAudio(audioCorrecto);
+          setTimeout(siguiente, 800);
+        } else {
+          feedbackEl.textContent = `Has seleccionado ${seleccionados}, se necesita 1`;
+          feedbackEl.className = 'mensaje incorrecto';
+          playAudio(audioIncorrecto);
+        }
+      }
+
+      // Asignar listeners
+      btnBack && btnBack.addEventListener('click', () => {
+        playAudio(audioClick);
+        setTimeout(() => { window.location.href = 'index.html'; }, 500);
+      });
+      const volverBtn = document.getElementById('volverInicio');
+      volverBtn && volverBtn.addEventListener('click', () => {
+        playAudio(audioClick);
+        setTimeout(() => { window.location.href = 'index.html'; }, 500);
+      });
+
+      // Inicializar primera barra
+      actualizarBarra();
+      // Preparar SVG al cargar si es ejercicio interactivo
+      if (indice === 2) generarSVG3(3, 'pastel3');
+      // Exponer funciones globales para botones inline
+      window.siguiente = siguiente;
+      window.verificarInteractivo = verificarInteractivo;
+    });
+  </script>
 </body>
 </html>
