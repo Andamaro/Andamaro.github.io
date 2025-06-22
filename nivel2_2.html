@@ -14,19 +14,23 @@
       margin: 0;
       padding: 0;
     }
-   .top-bar {
+    .top-bar {
       background-color: #212638;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 50px;
+      position: relative;
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
-
     .top-bar img {
       max-height: 40px;
+      max-width: 90%;
+      object-fit: contain;
     }
     .back-button {
+      position: absolute;
+      left: 10px;
       color: #3690F7;
       font-size: 1.2em;
       text-decoration: none;
@@ -125,7 +129,7 @@
         transform: translateY(0);
       }
     }
-     button {
+    button {
       display: block;
       margin: 20px auto 0;
       background-color: #3690F7;
@@ -140,23 +144,14 @@
     button:hover {
       background-color: #4aa4ff;
     }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
   </style>
 </head>
 
 <body>
    <div class="top-bar">
-    <img src="logo_enc.png" alt="FracVisual" style="max-height: 40px; max-width: 90%; object-fit: contain;">
+    <img src="logo_enc.png" alt="FracVisual">
   </div>
+
 
   <div class="progress-bar">
     <div id="progress" class="progress"></div>
@@ -224,7 +219,7 @@
     </div>
 
     <!-- Final -->
-    <div class="ejercicio" id="final" style="display:none;">
+    <div class="ejercicio" id="final">
       <h2>¡Nivel completado! 🎉</h2>
       <p>¡Excelente! Has relacionado correctamente cada gráfica con su fracción.</p>
       <button id="volverInicio" class="final">Volver a inicio</button>
@@ -240,7 +235,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
   <script>
-    const ejercicios = document.querySelectorAll('.ejercicio');
+    const ejercicios = Array.from(document.querySelectorAll('.ejercicio'));
     const barra = document.getElementById("progress");
     const audioClick = document.getElementById("clickAudio");
     const audioCorrecto = document.getElementById("correctoAudio");
@@ -285,13 +280,15 @@
       actual++;
       if (actual < ejercicios.length - 1) {
         ejercicios[actual].classList.add("active");
-      } else {
+      } else if (actual === ejercicios.length - 1) {
         // mostrar final
-        ejercicios[actual].style.display = "block";
-        // reproducir sonido de victoria
-        audioVictoria.currentTime = 0;
-        const p = audioVictoria.play();
-        if (p !== undefined) p.catch(()=>{});
+        ejercicios[actual].classList.add("active");
+        // reproducir sonido de victoria con retraso
+        setTimeout(() => {
+          audioVictoria.currentTime = 0;
+          const p = audioVictoria.play();
+          if (p !== undefined) p.catch(()=>{});
+        }, 200);
       }
       actualizarBarra();
     }
@@ -302,20 +299,23 @@
     }
 
     window.onload = () => {
-      // Atrás al menú de juegos
-      btnBack.addEventListener("click", () => {
-        playClick();
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 500);
-      });
-      // Volver a juegos al final
-      document.getElementById("volverInicio").addEventListener("click", () => {
-        playClick();
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 500);
-      });
+      if (btnBack) {
+        btnBack.addEventListener("click", () => {
+          playClick();
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 500);
+        });
+      }
+      const volverBtn = document.getElementById("volverInicio");
+      if (volverBtn) {
+        volverBtn.addEventListener("click", () => {
+          playClick();
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 500);
+        });
+      }
       actualizarBarra();
     };
   </script>

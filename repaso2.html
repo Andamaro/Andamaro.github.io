@@ -137,10 +137,10 @@
   </style>
 </head>
 <body>
-  <div class="top-bar">
-    <a class="back-button" onclick="history.back()"><i class="fas fa-arrow-left"></i></a>
+ <div class="top-bar">
     <img src="logo_enc.png" alt="FracVisual">
   </div>
+
   <div class="progress-bar">
     <div id="progress" class="progress"></div>
   </div>
@@ -167,7 +167,7 @@
       <button onclick="verificarInteractivo()">Verificar</button>
     </div>
     <!-- Bloque Final -->
-    <div class="ejercicio" id="final" style="display:none;">
+    <div class="ejercicio" id="final">
       <h2>¡Repaso completado! 🎉</h2>
       <p>Has repasado la representación visual de fracciones y completado el ejercicio.</p>
       <button id="volverInicio">Volver a inicio</button>
@@ -178,7 +178,7 @@
   <audio id="incorrectoAudio" src="incorrecto.mp3" preload="auto"></audio>
   <audio id="victoriaAudio" src="victoria.mp3" preload="auto"></audio>
   <script>
-    const bloques = document.querySelectorAll('.ejercicio');
+    const bloques = Array.from(document.querySelectorAll('.ejercicio'));
     const barra = document.getElementById('progress');
     const audioClick = document.getElementById('clickAudio');
     const audioCorrecto = document.getElementById('correctoAudio');
@@ -188,6 +188,7 @@
     let slices3 = [];
     
     function generarSVG3(denominador, containerId) {
+      slices3 = []; // reset
       const svgns = 'http://www.w3.org/2000/svg';
       const size = 200;
       const cx = size/2, cy = size/2, r = size/2;
@@ -217,8 +218,9 @@
         svg.appendChild(path);
         slices3.push(path);
       }
-      document.getElementById(containerId).innerHTML = '';
-      document.getElementById(containerId).appendChild(svg);
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      container.appendChild(svg);
     }
 
     function siguiente() {
@@ -228,13 +230,14 @@
       indice++;
       if (indice < bloques.length - 1) {
         bloques[indice].classList.add('active');
-      } else {
+      } else if (indice === bloques.length - 1) {
         // Mostrar bloque final
-        bloques[indice].style.display = 'block';
         bloques[indice].classList.add('active');
-        // Reproducir sonido de victoria al completar
-        audioVictoria.currentTime = 0;
-        audioVictoria.play().catch(()=>{});
+        // Reproducir sonido de victoria con ligero retraso
+        setTimeout(() => {
+          audioVictoria.currentTime = 0;
+          audioVictoria.play().catch((e) => console.warn('No se pudo reproducir victoriaAudio:', e));
+        }, 200);
       }
       actualizarBarra();
       if (indice === 2) generarSVG3(3, 'pastel3');
@@ -265,11 +268,14 @@
 
     window.onload = () => {
       actualizarBarra();
-      document.getElementById('volverInicio').addEventListener('click', () => {
-        audioClick.currentTime = 0;
-        audioClick.play().catch(()=>{});
-        setTimeout(() => window.location.href = 'index.html', 500);
-      });
+      const botonVolver = document.getElementById('volverInicio');
+      if (botonVolver) {
+        botonVolver.addEventListener('click', () => {
+          audioClick.currentTime = 0;
+          audioClick.play().catch(()=>{});
+          setTimeout(() => window.location.href = 'index.html', 500);
+        });
+      }
     };
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
