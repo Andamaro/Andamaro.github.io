@@ -226,8 +226,16 @@
       audioClick.play().catch(()=>{});
       bloques[indice].classList.remove('active');
       indice++;
-      if (indice < bloques.length - 1) bloques[indice].classList.add('active');
-      else bloques[indice].style.display = 'block';
+      if (indice < bloques.length - 1) {
+        bloques[indice].classList.add('active');
+      } else {
+        // Mostrar bloque final
+        bloques[indice].style.display = 'block';
+        bloques[indice].classList.add('active');
+        // Reproducir sonido de victoria al completar
+        audioVictoria.currentTime = 0;
+        audioVictoria.play().catch(()=>{});
+      }
       actualizarBarra();
       if (indice === 2) generarSVG3(3, 'pastel3');
     }
