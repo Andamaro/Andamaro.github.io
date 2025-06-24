@@ -18,12 +18,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
       height: 50px;
+      position: relative;
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     .top-bar img {
       max-height: 40px;
+      max-width: 90%;
+      object-fit: contain;
     }
     .back-button {
       position: absolute;
@@ -71,15 +73,33 @@
       font-size: 1.1em;
       margin-top: 12px;
     }
-    input {
-      display: block;
-      margin: 10px auto;
-      padding: 10px;
-      font-size: 1em;
-      border-radius: 6px;
-      border: none;
-      width: 60%;
+    .pastel {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
+      cursor: pointer;
+    }
+    .pastel div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.2em;
+      pointer-events: none;
+    }
+    .mensaje {
       text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .mensaje.correcto {
+      color: #27ae60;
+    }
+    .mensaje.incorrecto {
+      color: #e74c3c;
     }
     button {
       display: block;
@@ -106,237 +126,160 @@
         transform: translateY(0);
       }
     }
-    .mensaje {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    .mensaje.correcto {
-      color: #27ae60;
-    }
-    .mensaje.incorrecto {
-      color: #e74c3c;
-    }
-    /* Círculo visual para interactividad */
-    .pastel {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      margin: 20px auto;
-      position: relative;
-      cursor: pointer;
-    }
-    .pastel div {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 1.2em;
-      pointer-events: none;
-    }
   </style>
 </head>
 <body>
-
-<div class="top-bar">
+  <div class="top-bar">
     <img src="logo_enc.png" alt="FracVisual">
   </div>
-
   <div class="progress-bar">
     <div id="progress" class="progress"></div>
   </div>
-
   <div class="container">
     <!-- Bloque 1: Definición de fracción -->
     <div class="ejercicio active">
       <h2>Definición de fracción</h2>
-      <p>
-        Una fracción representa una parte de un todo. Se escribe como <strong>numerador/denominador</strong>, donde el numerador indica cuántas partes tomamos y el denominador en cuántas partes iguales se divide el todo. 
-      </p>
+      <p>Representar una fracción es mostrar, de manera visual o concreta, cómo se divide un todo en partes iguales y cuántas de esas partes estamos considerando. Por ejemplo, si tenemos una pizza dividida en 4 partes iguales y comemos 1, podemos mostrar esa fracción (1/4) coloreando una de las cuatro partes.</p>
       <button onclick="siguiente()">Continuar</button>
     </div>
-
     <!-- Bloque 2: Representación visual -->
     <div class="ejercicio">
       <h2>Representación visual de fracciones</h2>
-      <p>
-        Visualizar fracciones mediante círculos (o “pasteles”) ayuda a comprender proporciones. Por ejemplo, para 1/2 coloreamos la mitad del círculo; para 3/4 coloreamos tres de cuatro sectores iguales.
-      </p>
+      <p>Visualizar fracciones mediante círculos (o “pasteles”) ayuda a comprender proporciones. Por ejemplo, para 1/2 coloreamos la mitad del círculo; para 3/4 coloreamos tres de cuatro sectores iguales.</p>
       <button onclick="siguiente()">Continuar</button>
     </div>
-
     <!-- Ejercicio interactivo: identifica la fracción -->
     <div class="ejercicio">
-      <h2>Ejercicio: Identifica la fracción</h2>
+      <h2>Ejercicio 1: ¿Qué parte está coloreada?</h2>
       <p class="pregunta">Toca uno de los sectores para indicar 1/3:</p>
       <div id="pastel3" class="pastel"></div>
       <div id="feedback3" class="mensaje"></div>
       <button onclick="verificarInteractivo()">Verificar</button>
     </div>
-
     <!-- Bloque Final -->
-    <div class="ejercicio" id="final" style="display:none;">
+    <div class="ejercicio" id="final">
       <h2>¡Repaso completado! 🎉</h2>
       <p>Has repasado la representación visual de fracciones y completado el ejercicio.</p>
-      <button id="volverInicio">Volver al inicio</button>
+      <button id="volverInicio">Volver a inicio</button>
     </div>
   </div>
-
   <!-- Audios -->
   <audio id="clickAudio" src="Click.mp3" preload="auto"></audio>
   <audio id="correctoAudio" src="correcto.mp3" preload="auto"></audio>
   <audio id="incorrectoAudio" src="incorrecto.mp3" preload="auto"></audio>
   <audio id="victoriaAudio" src="victoria.mp3" preload="auto"></audio>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script>
-    const bloques = Array.from(document.querySelectorAll('.ejercicio'));
-    const barra = document.getElementById('progress');
-    const audioClick = document.getElementById('clickAudio');
-    const audioCorrecto = document.getElementById('correctoAudio');
-    const audioIncorrecto = document.getElementById('incorrectoAudio');
-    const audioVictoria = document.getElementById('victoriaAudio');
-    const btnBack = document.getElementById('btnBack');
-    let indice = 0;
-    let slices3 = [];
+    document.addEventListener('DOMContentLoaded', () => {
+      const bloques = Array.from(document.querySelectorAll('.ejercicio'));
+      const barra = document.getElementById('progress');
+      const audioClick = document.getElementById('clickAudio');
+      const audioCorrecto = document.getElementById('correctoAudio');
+      const audioIncorrecto = document.getElementById('incorrectoAudio');
+      const audioVictoria = document.getElementById('victoriaAudio');
+      const btnBack = document.getElementById('btnBack');
+      let indice = 0;
+      let slices3 = [];
 
-    // Genera SVG interactivo con 'denominador' sectores. Para el ejercicio 1/3.
-    function generarSVG3(denominador, containerId) {
-      const svgns = 'http://www.w3.org/2000/svg';
-      const size = 200;
-      const cx = size/2, cy = size/2, r = size/2;
-      const svg = document.createElementNS(svgns, 'svg');
-      svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
-      const slices = [];
-      for (let i = 0; i < denominador; i++) {
-        const startAngle = (2 * Math.PI * i) / denominador;
-        const endAngle = (2 * Math.PI * (i + 1)) / denominador;
-        const x1 = cx + r * Math.cos(startAngle);
-        const y1 = cy + r * Math.sin(startAngle);
-        const x2 = cx + r * Math.cos(endAngle);
-        const y2 = cy + r * Math.sin(endAngle);
-        const largeArc = (endAngle - startAngle) > Math.PI ? 1 : 0;
-        const path = document.createElementNS(svgns, 'path');
-        const d = [
-          `M ${cx} ${cy}`,
-          `L ${x1} ${y1}`,
-          `A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`,
-          'Z'
-        ].join(' ');
-        path.setAttribute('d', d);
-        path.setAttribute('fill', '#212638');
-        path.setAttribute('stroke', '#3690F7');
-        path.setAttribute('stroke-width', '2');
-        path.dataset.filled = '0';
-        path.style.cursor = 'pointer';
-        path.addEventListener('click', () => {
-          // alternar relleno
-          path.dataset.filled = path.dataset.filled === '1' ? '0' : '1';
-          path.setAttribute('fill', path.dataset.filled === '1' ? '#3690F7' : '#212638');
-          // sonido de clic
-          if (localStorage.getItem("sonidos") !== "false") {
-            audioClick.currentTime = 0;
-            audioClick.play().catch(()=>{});
-          }
-        });
-        svg.appendChild(path);
-        slices.push(path);
+      function playAudio(audioEl) {
+        audioEl.currentTime = 0;
+        const p = audioEl.play();
+        if (p !== undefined) p.catch(e => console.warn('Audio play failed:', e));
       }
-      const cont = document.getElementById(containerId);
-      cont.innerHTML = '';
-      cont.appendChild(svg);
-      return slices;
-    }
 
-    function siguiente() {
-      // Sonido clic al avanzar
-      if (localStorage.getItem("sonidos") !== "false") {
-        audioClick.currentTime = 0;
-        audioClick.play().catch(()=>{});
+      function generarSVG3(denominador, containerId) {
+        slices3 = [];
+        const svgns = 'http://www.w3.org/2000/svg';
+        const size = 200;
+        const cx = size/2, cy = size/2, r = size/2;
+        const svg = document.createElementNS(svgns, 'svg');
+        svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+        for (let i = 0; i < denominador; i++) {
+          const startAngle = (2 * Math.PI * i) / denominador;
+          const endAngle = (2 * Math.PI * (i + 1)) / denominador;
+          const x1 = cx + r * Math.cos(startAngle);
+          const y1 = cy + r * Math.sin(startAngle);
+          const x2 = cx + r * Math.cos(endAngle);
+          const y2 = cy + r * Math.sin(endAngle);
+          const path = document.createElementNS(svgns, 'path');
+          const d = [`M ${cx} ${cy}`, `L ${x1} ${y1}`, `A ${r} ${r} 0 0 1 ${x2} ${y2}`, 'Z'].join(' ');
+          path.setAttribute('d', d);
+          path.setAttribute('fill', '#212638');
+          path.setAttribute('stroke', '#3690F7');
+          path.setAttribute('stroke-width', '2');
+          path.dataset.filled = '0';
+          path.style.cursor = 'pointer';
+          path.addEventListener('click', () => {
+            path.dataset.filled = path.dataset.filled === '1' ? '0' : '1';
+            path.setAttribute('fill', path.dataset.filled === '1' ? '#3690F7' : '#212638');
+            playAudio(audioClick);
+          });
+          svg.appendChild(path);
+          slices3.push(path);
+        }
+        const container = document.getElementById(containerId);
+        if (container) {
+          container.innerHTML = '';
+          container.appendChild(svg);
+        } else console.warn('Container not found:', containerId);
       }
-      // Ocultar actual
-      bloques[indice].classList.remove('active');
-      indice++;
-      if (indice < bloques.length - 1) {
-        // Mostrar siguiente
-        bloques[indice].classList.add('active');
-      } else {
-        // Pantalla final:
-        bloques[indice].style.display = 'block';
-        bloques[indice].classList.add('active');
-        // Sonido de victoria
-        if (localStorage.getItem("sonidos") !== "false") {
-          audioVictoria.currentTime = 0;
-          audioVictoria.play().catch(()=>{});
+
+      function actualizarBarra() {
+        const porcentaje = (indice / (bloques.length - 1)) * 100;
+        barra.style.width = porcentaje + '%';
+      }
+
+      function siguiente() {
+        playAudio(audioClick);
+        bloques[indice].classList.remove('active');
+        indice++;
+        if (indice < bloques.length - 1) {
+          bloques[indice].classList.add('active');
+        } else if (indice === bloques.length - 1) {
+          bloques[indice].classList.add('active');
+          // Reproducir victoria con retraso
+          setTimeout(() => playAudio(audioVictoria), 200);
+        }
+        actualizarBarra();
+        if (indice === 2) generarSVG3(3, 'pastel3');
+      }
+
+      function verificarInteractivo() {
+        playAudio(audioClick);
+        const seleccionados = slices3.filter(p => p.dataset.filled === '1').length;
+        const feedbackEl = document.getElementById('feedback3');
+        if (!feedbackEl) return console.warn('Feedback element not found');
+        if (seleccionados === 1) {
+          feedbackEl.textContent = '¡Correcto!';
+          feedbackEl.className = 'mensaje correcto';
+          playAudio(audioCorrecto);
+          setTimeout(siguiente, 800);
+        } else {
+          feedbackEl.textContent = `Has seleccionado ${seleccionados}, se necesita 1`;
+          feedbackEl.className = 'mensaje incorrecto';
+          playAudio(audioIncorrecto);
         }
       }
+
+      // Asignar listeners
+      btnBack && btnBack.addEventListener('click', () => {
+        playAudio(audioClick);
+        setTimeout(() => { window.location.href = 'index.html'; }, 500);
+      });
+      const volverBtn = document.getElementById('volverInicio');
+      volverBtn && volverBtn.addEventListener('click', () => {
+        playAudio(audioClick);
+        setTimeout(() => { window.location.href = 'index.html'; }, 500);
+      });
+
+      // Inicializar primera barra
       actualizarBarra();
-      // Si entramos al ejercicio interactivo (su índice es 2 aquí):
-      if (indice === 2) {
-        // Generar SVG para 1/3 en pastel3
-        slices3 = generarSVG3(3, 'pastel3');
-      }
-    }
-
-    function verificarInteractivo() {
-      // Sonido clic
-      if (localStorage.getItem("sonidos") !== "false") {
-        audioClick.currentTime = 0;
-        audioClick.play().catch(()=>{});
-      }
-      // Contar sectores seleccionados
-      const seleccionados = slices3.filter(p => p.dataset.filled === '1').length;
-      if (seleccionados === 1) {
-        document.getElementById('feedback3').textContent = '¡Correcto!';
-        document.getElementById('feedback3').className = 'mensaje correcto';
-        if (localStorage.getItem("sonidos") !== "false") {
-          audioCorrecto.currentTime = 0;
-          audioCorrecto.play().catch(()=>{});
-        }
-        setTimeout(siguiente, 800);
-      } else {
-        document.getElementById('feedback3').textContent = `Has seleccionado ${seleccionados}, se necesita 1`;
-        document.getElementById('feedback3').className = 'mensaje incorrecto';
-        if (localStorage.getItem("sonidos") !== "false") {
-          audioIncorrecto.currentTime = 0;
-          audioIncorrecto.play().catch(()=>{});
-        }
-      }
-    }
-
-    function actualizarBarra() {
-      const porcentaje = (indice / (bloques.length - 1)) * 100;
-      barra.style.width = porcentaje + '%';
-    }
-
-    window.onload = () => {
-      actualizarBarra();
-      // Flecha atrás: regresa a la pantalla anterior (history.back)
-      if (btnBack) {
-        btnBack.addEventListener("click", () => {
-          if (localStorage.getItem("sonidos") !== "false") {
-            audioClick.currentTime = 0;
-            audioClick.play().catch(()=>{});
-          }
-          setTimeout(() => window.history.back(), 300);
-        });
-      }
-      // Botón "Volver al inicio":
-      const btnVolver = document.getElementById("volverInicio");
-      if (btnVolver) {
-        btnVolver.addEventListener("click", () => {
-          if (localStorage.getItem("sonidos") !== "false") {
-            audioClick.currentTime = 0;
-            audioClick.play().catch(()=>{});
-          }
-          // Navegar a index.html después de breve retardo
-          setTimeout(() => {
-            window.location.href = 'index.html';
-          }, 300);
-        });
-      }
-    };
+      // Preparar SVG al cargar si es ejercicio interactivo
+      if (indice === 2) generarSVG3(3, 'pastel3');
+      // Exponer funciones globales para botones inline
+      window.siguiente = siguiente;
+      window.verificarInteractivo = verificarInteractivo;
+    });
   </script>
 </body>
 </html>
